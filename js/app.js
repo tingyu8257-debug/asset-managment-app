@@ -195,6 +195,22 @@
     document.querySelector("[data-quick-actions-toggle]")?.setAttribute("aria-expanded", String(isOpen));
   }
 
+  function bindWorkspaceSheetDrag() {
+    const sheet = byId("mobile-workspace-menu");
+    let startY = 0;
+    let dragging = false;
+    sheet.addEventListener("pointerdown", (event) => {
+      startY = event.clientY;
+      dragging = true;
+    });
+    sheet.addEventListener("pointerup", (event) => {
+      if (!dragging) return;
+      dragging = false;
+      if (event.clientY - startY > 48) closeWorkspaceMenu();
+    });
+    sheet.addEventListener("pointercancel", () => { dragging = false; });
+  }
+
   function updateActiveNavigation() {
     const hash = portfolioRouter.syncHash();
     document.body.dataset.route = hash;
@@ -252,6 +268,11 @@
   document.addEventListener("click", (event) => {
     if (!event.target.closest("[data-nav-group]")) closeNavMenus();
     if (!event.target.closest(".site-header")) closeMobileNavigation();
+    if (event.target.closest("[data-sheet-close]")) {
+      closeWorkspaceMenu();
+      closeMobileFilters();
+      return;
+    }
     const target = event.target.closest("button, a");
     if (!target) return;
     if (target.dataset.mobileNavToggle !== undefined) {
@@ -264,11 +285,6 @@
     }
     if (target.dataset.workspaceMenuToggle !== undefined) {
       toggleWorkspaceMenu();
-      return;
-    }
-    if (target.dataset.sheetClose !== undefined) {
-      closeWorkspaceMenu();
-      closeMobileFilters();
       return;
     }
     if (target.dataset.filterToggle !== undefined) {
@@ -463,6 +479,7 @@
     });
   });
   cashFlowForm.bindFieldEvents();
+  bindWorkspaceSheetDrag();
 
   renderAll();
   updateActiveNavigation();
