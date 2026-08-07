@@ -106,6 +106,11 @@ body.is-standalone .site-header { background: #0c2438; }
 
 .dashboard-grid { display: grid; grid-template-columns: 1.45fr 1fr; gap: 20px; }
 .dashboard-row-three { grid-template-columns: repeat(3, 1fr); }
+#dashboard .stat-grid { gap: 12px; margin: 14px 0; }
+#dashboard .stat-card { padding: 14px 16px; border-radius: 8px; }
+#dashboard .stat-card p { font-size: 0.74rem; }
+#dashboard .stat-card strong { margin-bottom: 3px; font-size: 1.28rem; line-height: 1.2; overflow-wrap: anywhere; }
+#dashboard .stat-card span { font-size: 0.68rem; line-height: 1.4; }
 .quick-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; max-width: 680px; }
 .quick-actions .primary-button, .quick-actions .secondary-button { white-space: nowrap; }
 .quick-actions-toggle { display: none; }
@@ -363,6 +368,8 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   .quick-actions-toggle strong { color: #78c8bf; font-size: 1.3rem; line-height: 1; }
   .quick-actions {
     display: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
     padding: 10px;
     border: 1px solid rgba(120, 200, 191, 0.22);
     border-radius: 12px;
@@ -374,7 +381,20 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   .allocation-bar { height: 52px; }
   .allocation-bar div { min-width: 75px; padding: 4px; text-align: center; }
   .stat-grid, .toolbar, .research-toolbar, .lot-grid, .summary-grid, .form-grid, .fx-grid, .asset-facts, .dashboard-row-three, .activity-item { grid-template-columns: 1fr; }
-  .quick-actions .primary-button, .quick-actions .secondary-button { width: 100%; }
+  #dashboard .dashboard-row-three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #dashboard .stat-grid { gap: 10px; margin: 12px 0; }
+  #dashboard .stat-card { padding: 12px; }
+  #dashboard .stat-card p { font-size: 0.68rem; }
+  #dashboard .stat-card strong { font-size: 1.05rem; }
+  #dashboard .stat-card span { font-size: 0.64rem; }
+  .quick-actions .primary-button, .quick-actions .secondary-button {
+    width: 100%;
+    min-width: 0;
+    padding: 9px 6px;
+    white-space: normal;
+    line-height: 1.25;
+    text-align: center;
+  }
   .field-wide { grid-column: auto; }
   .content-section { padding: 50px 0; }
   .workspace-grid { grid-template-columns: 1fr; }
