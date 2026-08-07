@@ -14,6 +14,7 @@ assert(html.includes('rel="manifest" href="manifest.webmanifest"'));
 assert(html.includes("viewport-fit=cover"));
 assert(html.includes('js/pwa-registration.js'));
 assert(html.includes('id="pwa-status"'));
+assert(html.includes('data-quick-actions-toggle'));
 
 assert.strictEqual(manifest.display, "standalone");
 assert.strictEqual(manifest.id, "./index.html");
@@ -45,6 +46,7 @@ assert(serviceWorker.includes("request.mode === \"navigate\""));
 assert(serviceWorker.includes("caches.delete"));
 assert(serviceWorker.includes("SKIP_WAITING"));
 assert(!serviceWorker.includes(".then(() => self.skipWaiting())"));
+assert(serviceWorker.includes("core-satellite-v1.2.0"));
 
 assert(pagesWorkflow.includes("actions/configure-pages@v5"));
 assert(pagesWorkflow.includes("actions/upload-pages-artifact@v4"));

@@ -156,6 +156,16 @@
     if (!isOpen) closeNavMenus();
   }
 
+  function closeQuickActions() {
+    document.body.classList.remove("quick-actions-open");
+    document.querySelector("[data-quick-actions-toggle]")?.setAttribute("aria-expanded", "false");
+  }
+
+  function toggleQuickActions() {
+    const isOpen = document.body.classList.toggle("quick-actions-open");
+    document.querySelector("[data-quick-actions-toggle]")?.setAttribute("aria-expanded", String(isOpen));
+  }
+
   function updateActiveNavigation() {
     const hash = portfolioRouter.syncHash();
     document.querySelectorAll("[data-nav-group]").forEach((group) => group.classList.remove("nav-has-active"));
@@ -217,6 +227,10 @@
       toggleMobileNavigation();
       return;
     }
+    if (target.dataset.quickActionsToggle !== undefined) {
+      toggleQuickActions();
+      return;
+    }
     if (target.dataset.navMenu) {
       const group = target.closest("[data-nav-group]");
       const isOpen = group.classList.toggle("nav-open");
@@ -262,6 +276,7 @@
     if (target.dataset.quickAction === "expense") cashFlowForm.openEntryDialog("expense");
     if (target.dataset.quickAction === "journal") stocksModule.openJournalDialog();
     if (target.dataset.quickAction === "review") reviewView.openReviewDialog();
+    if (target.dataset.quickAction) closeQuickActions();
     if (target.dataset.openCashFlowEntry) cashFlowForm.openEntryDialog(target.dataset.openCashFlowEntry);
     if (target.dataset.openDataManagement !== undefined) {
       refreshRecoveryState();
@@ -367,6 +382,7 @@
     if (event.key === "Escape") {
       closeNavMenus();
       closeMobileNavigation();
+      closeQuickActions();
     }
   });
   window.addEventListener("hashchange", () => {

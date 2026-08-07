@@ -108,6 +108,7 @@ body.is-standalone .site-header { background: #0c2438; }
 .dashboard-row-three { grid-template-columns: repeat(3, 1fr); }
 .quick-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; max-width: 680px; }
 .quick-actions .primary-button, .quick-actions .secondary-button { white-space: nowrap; }
+.quick-actions-toggle { display: none; }
 .dashboard-allocation-panel { margin: 20px 0; }
 .allocation-card-grid { margin-top: 12px; }
 .dashboard-lower-grid { margin-top: 20px; align-items: start; }
@@ -346,6 +347,29 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   .topbar > .primary-button { display: none; }
   .hero-section { padding: 38px 0 42px; background: linear-gradient(165deg, var(--navy) 0 28%, var(--cream) 28%); }
   .hero-heading, .section-heading, .card-footer, .entry-heading { align-items: stretch; flex-direction: column; }
+  .hero-heading { gap: 18px; margin-bottom: 18px; }
+  .quick-actions-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 52px;
+    padding: 12px 16px;
+    border: 1px solid rgba(120, 200, 191, 0.45);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    font-weight: 800;
+  }
+  .quick-actions-toggle strong { color: #78c8bf; font-size: 1.3rem; line-height: 1; }
+  .quick-actions {
+    display: none;
+    padding: 10px;
+    border: 1px solid rgba(120, 200, 191, 0.22);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+  body.quick-actions-open .quick-actions { display: grid; }
+  body.quick-actions-open .quick-actions-toggle strong { transform: rotate(45deg); }
   .allocation-panel { grid-template-columns: 1fr; gap: 16px; }
   .allocation-bar { height: 52px; }
   .allocation-bar div { min-width: 75px; padding: 4px; text-align: center; }

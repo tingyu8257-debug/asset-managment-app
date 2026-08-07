@@ -113,7 +113,11 @@
             <p class="eyebrow">NET WORTH DASHBOARD</p>
             <h1>個人淨資產總覽</h1>
           </div>
-          <div class="quick-actions">
+          <button class="quick-actions-toggle" type="button" aria-expanded="false" aria-controls="dashboard-quick-actions" data-quick-actions-toggle>
+            <span>Quick Actions</span>
+            <strong>＋</strong>
+          </button>
+          <div id="dashboard-quick-actions" class="quick-actions">
             <button class="primary-button" type="button" data-quick-action="buy">＋ Buy Transaction</button>
             <button class="secondary-button" type="button" data-quick-action="sell">＋ Sell Transaction</button>
             <button class="secondary-button" type="button" data-quick-action="buy">＋ Add Position</button>
