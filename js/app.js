@@ -215,12 +215,22 @@
     const hash = portfolioRouter.syncHash();
     document.body.dataset.route = hash;
     document.querySelector(".mobile-home-button")?.classList.toggle("is-hidden", hash === "dashboard");
+    const mobileTitle = document.querySelector(".mobile-route-title");
+    if (mobileTitle) mobileTitle.textContent = getMobileRouteTitle(hash);
     document.querySelectorAll("[data-nav-group]").forEach((group) => group.classList.remove("nav-has-active"));
     document.querySelectorAll(".main-nav .nav-link").forEach((link) => {
       const isActive = link.getAttribute("href") === `#${hash}`;
       link.classList.toggle("active", isActive);
       if (isActive) link.closest("[data-nav-group]")?.classList.add("nav-has-active");
     });
+  }
+
+  function getMobileRouteTitle(route) {
+    if (["research-dashboard", "watchlist", "positions", "journal", "reviews"].includes(route)) return "Investment";
+    if (["assets", "accounts", "insurance", "liabilities"].includes(route)) return "Asset";
+    if (route === "cash-flow") return "Cash Flow";
+    if (route === "records") return "Records";
+    return "Net Worth Dashboard";
   }
 
   function renderImportSummary(summary) {

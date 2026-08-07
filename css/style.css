@@ -323,7 +323,7 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
 .comparison-grid span { color: var(--muted); font-size: 0.78rem; }
 .site-footer { padding: 26px 0; background: var(--navy); color: #aebfc8; font-size: 0.75rem; text-align: center; }
 .site-footer p { margin-bottom: 2px; }
-.mobile-home-button, .floating-menu-button, .bottom-sheet-menu, .sheet-backdrop, .workspace-tabs, .mobile-filter-button { display: none; }
+.mobile-route-title, .mobile-home-button, .floating-menu-button, .bottom-sheet-menu, .sheet-backdrop, .workspace-tabs, .mobile-filter-button { display: none; }
 
 @media (max-width: 960px) {
   .topbar { flex-wrap: wrap; gap: 14px; padding: 12px 0; }
@@ -341,8 +341,20 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   body { padding-bottom: calc(84px + env(safe-area-inset-bottom)); font-size: 15px; }
   .container { width: min(100% - 28px, 1180px); }
   .site-header { position: sticky; top: 0; border-bottom-color: rgba(255, 255, 255, 0.08); background: var(--navy); color: #fff; }
-  .topbar { min-height: 50px; justify-content: flex-end; gap: 10px; padding: max(6px, env(safe-area-inset-top)) 0 6px; }
+  .topbar { min-height: 50px; justify-content: space-between; gap: 10px; padding: max(6px, env(safe-area-inset-top)) 0 6px; }
   .brand { display: none; }
+  .mobile-route-title {
+    display: block;
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .mobile-nav-toggle, .main-nav, .global-search { display: none; }
   .mobile-home-button {
     display: grid;
@@ -375,24 +387,23 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   body[data-route="insurance"] #assets,
   body[data-route="liabilities"] #assets { display: block; }
   body:not([data-route="dashboard"]) #dashboard { display: none; }
-  .hero-section { min-height: calc(100svh - 50px); padding: 18px 0 22px; background: linear-gradient(180deg, var(--navy) 0 128px, var(--cream) 128px); }
+  .hero-section { min-height: calc(100svh - 50px); padding: 18px 0 22px; background: var(--cream); }
   .hero-heading, .section-heading, .card-footer, .entry-heading { align-items: stretch; flex-direction: column; }
-  .hero-heading { gap: 12px; min-height: 82px; margin-bottom: 18px; color: #fff; }
-  .hero-heading .eyebrow { color: #78c8bf; }
-  .hero-heading h1 { margin-bottom: 0; color: #fff; font-size: 1.45rem; line-height: 1.15; }
+  .hero-heading { gap: 12px; min-height: 0; margin-bottom: 18px; color: var(--text); }
+  .hero-heading > div:first-child { display: none; }
   .quick-actions-toggle {
     display: flex;
     align-items: center;
     justify-content: space-between;
     min-height: 52px;
     padding: 12px 16px;
-    border: 1px solid rgba(120, 200, 191, 0.42);
+    border: 1px solid var(--border);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
+    background: var(--surface);
+    color: var(--teal-dark);
     font-weight: 800;
   }
-  .quick-actions-toggle strong { color: #78c8bf; font-size: 1.3rem; line-height: 1; }
+  .quick-actions-toggle strong { color: var(--teal-dark); font-size: 1.3rem; line-height: 1; }
   .quick-actions {
     display: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -447,11 +458,10 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
     text-align: center;
   }
   .field-wide { grid-column: auto; }
-  .content-section { min-height: calc(100svh - 50px); padding: 18px 0 24px; background: linear-gradient(180deg, var(--navy) 0 136px, var(--cream) 136px); }
-  .alternate-section { background: linear-gradient(180deg, var(--navy) 0 136px, var(--cream) 136px); }
-  .section-heading { gap: 8px; min-height: 92px; margin-bottom: 28px; color: #fff; }
-  .section-heading .eyebrow { color: #78c8bf; }
-  .section-heading h2 { margin-bottom: 0; color: #fff; font-size: 1.3rem; line-height: 1.2; }
+  .content-section { min-height: calc(100svh - 50px); padding: 22px 0 24px; background: var(--cream); }
+  .alternate-section { background: var(--cream); }
+  .section-heading { gap: 8px; min-height: 0; margin-bottom: 22px; color: var(--text); }
+  .section-heading > div:first-child { display: none; }
   .section-heading .api-actions {
     width: 100%;
     margin-top: 30px;
