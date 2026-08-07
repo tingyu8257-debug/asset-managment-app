@@ -1,0 +1,33 @@
+{
+  "name": "Core-Satellite 個人資產管理",
+  "short_name": "Core-Satellite",
+  "id": "./index.html",
+  "description": "離線優先的個人資產、現金流與投資研究管理 App。",
+  "start_url": "./index.html#dashboard",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f3ed",
+  "theme_color": "#0c2438",
+  "orientation": "any",
+  "categories": ["finance", "productivity"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

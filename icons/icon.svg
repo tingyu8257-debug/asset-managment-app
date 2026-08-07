@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Core Satellite">
+  <rect width="512" height="512" rx="104" fill="#0c2438"/>
+  <circle cx="374" cy="138" r="46" fill="#0c7b73"/>
+  <path d="M96 340c52-114 112-170 180-170 47 0 84 27 126 80" fill="none" stroke="#f5f3ed" stroke-width="34" stroke-linecap="round"/>
+  <path d="M108 374h296" stroke="#8fc7c1" stroke-width="34" stroke-linecap="round"/>
+  <text x="96" y="248" fill="#ffffff" font-family="Arial, sans-serif" font-size="92" font-weight="800">CS</text>
+</svg>

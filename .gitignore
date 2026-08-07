@@ -1,0 +1,20 @@
+work/
+.env
+node_modules/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Private local data and exported backups must stay off GitHub.
+backups/
+exports/
+private-data/
+personal-data/
+core-satellite-backup-*.json
+Core-Satellite-Backup-*.json
+AssetBackup_*.json
+*backup*.json
+*Backup*.json
+*.local.json
+*.private.json

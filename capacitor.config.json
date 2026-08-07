@@ -1,0 +1,10 @@
+{
+  "appId": "com.local.personalassetmanagement",
+  "appName": "personal asset management",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "ios": {
+    "scheme": "PersonalAssetManagement",
+    "contentInset": "automatic"
+  }
+}

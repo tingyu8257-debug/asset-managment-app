@@ -1,0 +1,894 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Core–Satellite 投資研究室</title>
+  <meta name="theme-color" content="#0c2438">
+  <meta name="description" content="離線優先的個人資產、現金流與投資研究管理 App。">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Core-Satellite">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/app-constants.js" defer></script>
+  <script src="js/asset-calculation-core.js" defer></script>
+  <script src="js/personal-finance-domain.js" defer></script>
+  <script src="js/cash-flow-domain.js" defer></script>
+  <script src="js/storage.js" defer></script>
+  <script src="js/position-math.js" defer></script>
+  <script src="js/finance-domain.js" defer></script>
+  <script src="js/research-domain.js" defer></script>
+  <script src="js/decision-domain.js" defer></script>
+  <script src="js/review-domain.js" defer></script>
+  <script src="js/app-labels.js" defer></script>
+  <script src="js/app-formatters.js" defer></script>
+  <script src="js/app-utils.js" defer></script>
+  <script src="js/data-management-service.js" defer></script>
+  <script src="js/portfolio-selectors.js" defer></script>
+  <script src="js/net-worth-selectors.js" defer></script>
+  <script src="js/calculation-service.js" defer></script>
+  <script src="js/cash-flow-service.js" defer></script>
+  <script src="js/investment-repositories.js" defer></script>
+  <script src="js/portfolio/stocks/stock-research-system.js" defer></script>
+  <script src="js/dashboard-view.js" defer></script>
+  <script src="js/cash-flow-view.js" defer></script>
+  <script src="js/investment-view.js" defer></script>
+  <script src="js/investment-form-controller.js" defer></script>
+  <script src="js/journal-view.js" defer></script>
+  <script src="js/review-view.js" defer></script>
+  <script src="js/portfolio/portfolio-registry.js" defer></script>
+  <script src="js/portfolio/portfolio-router.js" defer></script>
+  <script src="js/portfolio/stocks/stocks-module.js" defer></script>
+  <script src="js/personal-finance-view.js" defer></script>
+  <script src="js/personal-finance-form-controller.js" defer></script>
+  <script src="js/cash-flow-form-controller.js" defer></script>
+  <script src="js/pwa-registration.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container topbar">
+      <a class="brand" href="#dashboard">
+        <span class="brand-mark">CS</span>
+        <span>
+          <strong>Core–Satellite</strong>
+          <small>投資研究室</small>
+        </span>
+      </a>
+      <button class="mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" data-mobile-nav-toggle>≡</button>
+      <nav id="main-navigation" class="main-nav" aria-label="主要導覽">
+        <a class="nav-link" href="#dashboard">Dashboard</a>
+        <div class="nav-group" data-nav-group>
+          <button class="nav-trigger" type="button" aria-expanded="false" aria-haspopup="true" data-nav-menu="portfolio-menu">Portfolio <span aria-hidden="true">▼</span></button>
+          <div id="portfolio-menu" class="nav-menu" data-nav-panel>
+            <p class="nav-menu-label">Stocks</p>
+            <a class="nav-link" href="#research-dashboard">Research Dashboard</a>
+            <a class="nav-link" href="#watchlist">Watchlist</a>
+            <a class="nav-link" href="#positions">Positions</a>
+            <a class="nav-link" href="#journal">Research Journal</a>
+            <a class="nav-link" href="#reviews">Reviews & Lessons</a>
+          </div>
+        </div>
+        <div class="nav-group" data-nav-group>
+          <button class="nav-trigger" type="button" aria-expanded="false" aria-haspopup="true" data-nav-menu="finance-menu">Finance <span aria-hidden="true">▼</span></button>
+          <div id="finance-menu" class="nav-menu" data-nav-panel>
+            <a class="nav-link" href="#assets">Assets</a>
+            <a class="nav-link" href="#cash-flow">Cash Flow</a>
+          </div>
+        </div>
+        <div class="nav-group" data-nav-group>
+          <button class="nav-trigger" type="button" aria-expanded="false" aria-haspopup="true" data-nav-menu="settings-menu">Settings <span aria-hidden="true">▼</span></button>
+          <div id="settings-menu" class="nav-menu" data-nav-panel>
+            <button class="nav-menu-button" type="button" data-open-data-management>Backup & Restore</button>
+            <button class="nav-menu-button" type="button" data-open-data-management>Data Management</button>
+            <button class="nav-menu-button open-settings-button" type="button">Portfolio Settings</button>
+            <button class="nav-menu-button" type="button" data-open-category-management>Cash Flow Categories</button>
+          </div>
+        </div>
+      </nav>
+      <label class="global-search">
+        <span class="sr-only">全站搜尋</span>
+        <input id="global-search-input" type="search" placeholder="搜尋資料">
+        <div id="global-search-results" class="global-search-results" hidden></div>
+      </label>
+      <button class="primary-button open-stock-dialog-button" type="button">＋ 新增研究標的</button>
+    </div>
+  </header>
+
+  <div id="pwa-status" class="pwa-status" role="status" aria-live="polite" hidden>
+    <span id="pwa-status-text"></span>
+    <button id="pwa-install-button" class="small-button" type="button" hidden>安裝 App</button>
+  </div>
+
+  <main>
+    <section id="dashboard" class="hero-section">
+      <div class="container">
+        <div class="hero-heading">
+          <div>
+            <p class="eyebrow">NET WORTH DASHBOARD</p>
+            <h1>個人淨資產總覽</h1>
+          </div>
+          <div class="quick-actions">
+            <button class="primary-button" type="button" data-quick-action="buy">＋ Buy Transaction</button>
+            <button class="secondary-button" type="button" data-quick-action="sell">＋ Sell Transaction</button>
+            <button class="secondary-button" type="button" data-quick-action="buy">＋ Add Position</button>
+            <button class="secondary-button" type="button" data-quick-action="income">＋ Add Income</button>
+            <button class="secondary-button" type="button" data-quick-action="account">＋ Add Financial Account</button>
+            <button class="secondary-button" type="button" data-quick-action="insurance">＋ Add Insurance</button>
+            <button class="secondary-button" type="button" data-quick-action="liability">＋ Add Liability</button>
+            <button class="secondary-button" type="button" data-quick-action="expense">＋ Add Expense</button>
+            <button class="secondary-button" type="button" data-quick-action="journal">＋ Add Journal</button>
+          </div>
+        </div>
+
+        <div class="stat-grid dashboard-row-three">
+          <article class="stat-card">
+            <p>Net Worth</p>
+            <strong id="dashboard-net-worth">尚未設定</strong>
+            <span id="dashboard-net-worth-note" class="good">Assets - Liabilities</span>
+          </article>
+          <article class="stat-card">
+            <p>Total Assets</p>
+            <strong id="dashboard-total-assets">尚未設定</strong>
+            <span>Cash + Investments + Insurance</span>
+          </article>
+          <article class="stat-card attention-card">
+            <p>Total Liabilities</p>
+            <strong id="dashboard-total-liabilities">尚未設定</strong>
+            <span id="dashboard-liability-note">Current Balance only</span>
+          </article>
+        </div>
+
+        <div class="stat-grid dashboard-row-three">
+          <article class="stat-card">
+            <p>Cash</p>
+            <strong id="dashboard-cash">尚未設定</strong>
+            <span id="dashboard-cash-note">0 個有餘額帳戶</span>
+          </article>
+          <article class="stat-card">
+            <p>Investments</p>
+            <strong id="dashboard-investments">尚未設定</strong>
+            <span id="dashboard-investments-note">0 個持有部位</span>
+          </article>
+          <article class="stat-card">
+            <p>Insurance Cash Value</p>
+            <strong id="dashboard-insurance">尚未設定</strong>
+            <span id="dashboard-insurance-note">Coverage 不計入</span>
+          </article>
+        </div>
+
+        <article class="allocation-panel dashboard-allocation-panel">
+          <div class="allocation-copy">
+            <p class="panel-label">ASSET ALLOCATION</p>
+            <p class="allocation-number">Total Assets <strong id="dashboard-allocation-total">尚未設定</strong></p>
+            <p id="dashboard-allocation-summary">Allocation 不包含負債。</p>
+          </div>
+          <div>
+            <div id="dashboard-allocation-bar" class="allocation-bar" aria-label="資產配置">
+              <div id="allocation-cash-bar" class="core-bar">Cash</div>
+              <div id="allocation-investment-bar" class="satellite-bar">Investments</div>
+              <div id="allocation-insurance-bar" class="uninvested-bar">Insurance</div>
+            </div>
+            <div id="dashboard-allocation-cards" class="summary-grid allocation-card-grid"></div>
+          </div>
+        </article>
+
+        <div class="dashboard-grid dashboard-lower-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">LATEST ACTIVITY</p><h2>最近更新</h2></div></div>
+            <div id="dashboard-latest-activity" class="activity-list"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">WARNINGS</p><h2>資料提醒</h2></div></div>
+            <div id="dashboard-warnings" class="alert-list"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="research-dashboard" class="content-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RESEARCH DASHBOARD</p>
+            <h2>投資研究總覽</h2>
+            <p>集中檢查缺少研究、即將回顧、過期研究與最近決策。</p>
+          </div>
+          <button class="primary-button" type="button" data-quick-action="journal">＋ 新增決策紀錄</button>
+        </div>
+        <div class="toolbar research-toolbar">
+          <label class="field search-field"><span>搜尋 Research</span><input id="research-dashboard-search" type="search" placeholder="Symbol、公司、研究內容或 Tags"></label>
+          <label class="field"><span>研究狀態</span><select id="research-dashboard-status-filter"><option value="all">All</option><option value="hasResearch">Has Research</option><option value="missingResearch">Missing Research</option><option value="needsReview">Needs Review</option><option value="outdated">Outdated</option></select></label>
+          <label class="field"><span>Position</span><select id="research-dashboard-position-filter"><option value="all">All</option><option value="hasPosition">Has Position</option><option value="noPosition">No Position</option></select></label>
+          <label class="field"><span>Tag</span><input id="research-dashboard-tag-filter" type="search" placeholder="例如 AI"></label>
+          <label class="field"><span>Confidence ≥</span><input id="research-dashboard-confidence-filter" type="number" min="1" max="10" step="1"></label>
+          <label class="field"><span>Next Review From</span><input id="research-dashboard-review-from" type="date"></label>
+          <label class="field"><span>Next Review To</span><input id="research-dashboard-review-to" type="date"></label>
+          <label class="field"><span>排序</span><select id="research-dashboard-sort-by"><option value="severity">Research Status</option><option value="companyName">Company Name</option><option value="symbol">Symbol</option><option value="lastUpdated">Last Updated</option><option value="nextReviewDate">Next Review Date</option><option value="daysSinceLastUpdate">Days Since Last Update</option><option value="confidence">Confidence</option><option value="recentlyCreated">Recently Created</option></select></label>
+          <label class="field"><span>方向</span><select id="research-dashboard-sort-direction"><option value="desc">Descending</option><option value="asc">Ascending</option></select></label>
+          <div class="field"><span>篩選</span><button id="research-dashboard-clear-filters" class="secondary-button" type="button">Clear All Filters</button></div>
+        </div>
+        <div id="research-dashboard-filter-summary" class="filter-summary" aria-live="polite"></div>
+        <div id="research-dashboard-content" class="asset-section-grid"></div>
+      </div>
+    </section>
+
+    <section id="watchlist" class="content-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">WATCHLIST</p>
+            <h2>研究觀察清單</h2>
+            <p>從初步發現到退出，保留每個標的的研究脈絡。</p>
+          </div>
+          <button class="primary-button open-stock-dialog-button" type="button">＋ 新增標的</button>
+        </div>
+
+        <div class="toolbar">
+          <label class="field search-field">
+            <span>搜尋</span>
+            <input id="watchlist-search" type="search" placeholder="股票代號或公司名稱">
+          </label>
+          <label class="field">
+            <span>研究階段</span>
+            <select id="watchlist-stage-filter">
+              <option>全部階段</option>
+              <option>初步發現</option>
+              <option>深入研究</option>
+              <option>等待合理價格</option>
+              <option>正常持有</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>市場</span>
+            <select id="watchlist-market-filter"><option>全部市場</option><option>台灣</option><option>美國</option></select>
+          </label>
+          <label class="field">
+            <span>產業</span>
+            <select id="watchlist-industry-filter"><option>全部產業</option><option>半導體</option><option>消費電子</option><option>零售</option></select>
+          </label>
+        </div>
+
+        <div id="watchlist-grid" class="watchlist-grid"></div>
+      </div>
+    </section>
+<section id="positions" class="content-section alternate-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">POSITION MANAGER</p>
+            <h2>衛星部位管理</h2>
+            <p>手動更新價格，檢查部位大小與集中程度。</p>
+          </div>
+          <button id="open-general-transaction-button" class="primary-button" type="button">＋ 新增交易紀錄</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>標的 / 幣別</th><th>持有股數</th><th>平均成本</th><th>目前價格</th><th>持倉成本</th><th>目前市值</th><th>未實現損益 / 報酬率</th><th>Satellite / 總資產占比</th><th>最近操作</th><th>操作</th></tr></thead>
+            <tbody id="positions-body"></tbody>
+          </table>
+        </div>
+
+        <article class="panel lots-panel">
+          <div class="panel-heading">
+            <div><p class="panel-label">TRANSACTION LOG</p><h3 id="transaction-log-title">交易紀錄</h3></div>
+            <label class="toggle-label"><input id="show-deleted-transactions" type="checkbox"> 顯示已移除</label>
+          </div>
+          <div id="transaction-log" class="lot-grid"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="journal" class="content-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RESEARCH JOURNAL</p>
+            <h2>研究與決策紀錄</h2>
+            <p>保存當下的判斷，避免事後用結果改寫記憶。</p>
+          </div>
+          <button id="open-journal-button" class="primary-button" type="button">＋ 新增紀錄</button>
+        </div>
+        <div class="toolbar journal-toolbar">
+          <label class="field search-field"><span>搜尋</span><input id="journal-search" type="search" placeholder="股票代號或標題"></label>
+          <label class="field"><span>股票</span><select id="journal-stock-filter"><option>全部股票</option></select></label>
+          <label class="field"><span>紀錄類型</span><select id="journal-type-filter"><option>全部類型</option></select></label>
+          <label class="field"><span>執行狀態</span><select id="journal-execution-filter"><option value="">全部狀態</option></select></label>
+          <label class="field"><span>Tag</span><input id="journal-tag-filter" type="search" placeholder="例如 Long Term"></label>
+          <label class="field"><span>交易關聯</span><select id="journal-transaction-filter"><option value="">全部</option><option value="yes">已連結交易</option><option value="no">未連結交易</option></select></label>
+          <label class="field"><span>開始日期</span><input id="journal-date-from" type="date"></label>
+          <label class="field"><span>結束日期</span><input id="journal-date-to" type="date"></label>
+          <label class="field"><span>排序</span><select id="journal-sort"><option value="newest">最新在前</option><option value="oldest">最舊在前</option><option value="confidence">Confidence</option><option value="updated">最近更新</option></select></label>
+          <label class="toggle-label"><input id="journal-show-archived" type="checkbox"> 顯示封存</label>
+        </div>
+        <div id="journal-list" class="journal-list"></div>
+      </div>
+    </section>
+
+    <section id="reviews" class="content-section alternate-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">REVIEW & LESSONS</p>
+            <h2>投資回顧與經驗累積</h2>
+            <p>回顧已做出的 Decision，整理可重複使用的 Mistake、Success 與 Lesson。</p>
+          </div>
+          <div class="api-actions">
+            <button class="primary-button" type="button" data-open-review-dialog>＋ New Review</button>
+            <button class="secondary-button" type="button" data-open-lesson-dialog>＋ New Lesson</button>
+          </div>
+        </div>
+        <div class="toolbar journal-toolbar">
+          <label class="field search-field"><span>搜尋</span><input id="review-search" type="search" placeholder="Company、Lesson、Mistake、Success 或 Tags"></label>
+          <label class="field"><span>Company</span><select id="review-company-filter"><option value="">全部公司</option></select></label>
+          <label class="field"><span>Review Type</span><select id="review-type-filter"><option value="">全部類型</option></select></label>
+          <label class="field"><span>Outcome</span><select id="review-outcome-filter"><option value="">全部 Outcome</option></select></label>
+          <label class="field"><span>Lesson Type</span><select id="lesson-kind-filter"><option value="">全部 Lesson</option></select></label>
+          <label class="field"><span>Lesson Category</span><select id="lesson-category-filter"><option value="">全部分類</option></select></label>
+          <label class="field"><span>Tag</span><input id="review-tag-filter" type="search" placeholder="例如 FOMO"></label>
+          <label class="toggle-label"><input id="review-show-archived" type="checkbox"> 顯示封存</label>
+        </div>
+        <div id="reviews-content">
+          <div id="review-summary-cards" class="stat-grid dashboard-row-three"></div>
+          <div class="dashboard-grid dashboard-lower-grid">
+            <article class="panel">
+              <div class="panel-heading"><div><p class="panel-label">DECISION REVIEWS</p><h2>Review History</h2></div></div>
+              <div id="review-list" class="asset-list"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-heading"><div><p class="panel-label">LESSONS LEARNED</p><h2>Lesson Library</h2></div></div>
+              <div id="lesson-list" class="asset-list"></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="assets" class="content-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">OFFLINE ASSET CORE</p>
+            <h2>離線資產資料核心</h2>
+            <p>管理現金、銀行存款、券商現金、保單與負債；只做手動輸入，不串接外部 API。</p>
+          </div>
+        </div>
+        <article class="panel asset-summary-panel">
+          <div class="panel-heading"><div><p class="panel-label">ACCOUNT BALANCES</p><h2>帳戶最新餘額小計</h2></div></div>
+          <p class="form-help">同幣別才會加總；不同幣別不會自動換算。封存帳戶預設不列入目前小計。</p>
+          <div id="asset-currency-subtotals" class="summary-grid"></div>
+        </article>
+        <div class="asset-section-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">FINANCIAL ACCOUNTS</p><h2>帳戶管理</h2></div><button id="open-account-button" class="primary-button" type="button">＋ 新增帳戶</button></div>
+            <p class="form-help">券商現金只輸入真的留在券商帳戶的現金，避免與股票持倉重複計算。</p>
+            <div id="accounts-list" class="asset-list"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">INSURANCE</p><h2>保單管理</h2></div><button id="open-policy-button" class="primary-button" type="button">＋ 新增保單</button></div>
+            <div id="policies-list" class="asset-list"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">LIABILITIES</p><h2>負債管理</h2></div><button id="open-liability-button" class="primary-button" type="button">＋ 新增負債</button></div>
+            <div id="liabilities-list" class="asset-list"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="cash-flow" class="content-section alternate-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CASH FLOW</p>
+            <h2>收支與現金流管理</h2>
+            <p>手動記錄 Income、Expense、Transfer、Recurring 與 Budget，不連接外部 API。</p>
+          </div>
+          <div class="api-actions">
+            <button class="primary-button" type="button" data-open-cash-flow-entry="income">＋ Income</button>
+            <button class="primary-button" type="button" data-open-cash-flow-entry="expense">＋ Expense</button>
+            <button class="secondary-button" type="button" data-open-cash-flow-entry="transfer">＋ Transfer</button>
+            <button class="secondary-button" type="button" data-open-recurring>＋ Recurring</button>
+            <button class="secondary-button" type="button" data-open-budget>＋ Budget</button>
+          </div>
+        </div>
+
+        <div class="stat-grid dashboard-row-three">
+          <article class="stat-card"><p>This Month Income</p><strong id="cash-flow-income">尚未設定</strong><span>本月收入</span></article>
+          <article class="stat-card"><p>This Month Expense</p><strong id="cash-flow-expense">尚未設定</strong><span>本月支出</span></article>
+          <article class="stat-card"><p>Net Cash Flow</p><strong id="cash-flow-net">尚未設定</strong><span>Savings Rate <span id="cash-flow-savings-rate">0%</span></span></article>
+        </div>
+
+        <div class="dashboard-grid dashboard-lower-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">BUDGET OVERVIEW</p><h2>本月預算</h2></div></div>
+            <div id="budget-overview-list" class="asset-list"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">UPCOMING RECURRING</p><h2>待確認週期項目</h2></div></div>
+            <div id="upcoming-recurring-list" class="asset-list"></div>
+          </article>
+        </div>
+
+        <div class="dashboard-grid dashboard-lower-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">RECENT CASH FLOW</p><h2>最近收支</h2></div></div>
+            <div id="recent-cash-flow-list" class="asset-list"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">MONTHLY REPORT</p><h2>本月分類報表</h2></div></div>
+            <div id="monthly-report-list" class="asset-list"></div>
+          </article>
+        </div>
+
+        <article class="panel dashboard-lower-grid">
+          <div class="panel-heading"><div><p class="panel-label">RECURRING LIST</p><h2>週期收入與支出</h2></div></div>
+          <div id="recurring-list" class="asset-list"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="settings-dialog">
+    <form id="settings-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">SETTINGS</p><h2>編輯匯率與提醒設定</h2></div><button class="dialog-close" type="button" data-close-dialog="settings-dialog">×</button></div>
+      <input name="totalPortfolioValue" type="hidden">
+      <input name="coreValue" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>Satellite 上限 % *</span><input name="satelliteTargetPercent" type="number" min="0" step="0.1" required></label>
+        <label class="field"><span>單一股票占 Satellite 上限 % *</span><input name="maxSingleStockSatellitePercent" type="number" min="0" step="0.1" required></label>
+        <label class="field"><span>單一股票占總資產上限 % *</span><input name="maxSingleStockTotalPercent" type="number" min="0" step="0.1" required></label>
+        <label class="field"><span>單一題材占 Satellite 上限 % *</span><input name="maxThemeSatellitePercent" type="number" min="0" step="0.1" required></label>
+        <label class="field"><span>研究過期提醒天數 *</span><input name="researchOutdatedDays" type="number" min="1" step="1" required></label>
+        <input name="baseCurrency" type="hidden" value="TWD">
+      </div>
+      <p id="fx-updated-at" class="form-help">尚未設定</p>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="settings-dialog">取消</button><button class="primary-button" type="submit">儲存設定</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="account-dialog">
+    <form id="account-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">FINANCIAL ACCOUNT</p><h2 id="account-dialog-title">新增帳戶</h2></div><button class="dialog-close" type="button" data-close-dialog="account-dialog">×</button></div>
+      <input name="accountId" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>帳戶名稱 *</span><input name="name" type="text" required></label>
+        <label class="field"><span>帳戶類型 *</span><input name="type" type="text" placeholder="可選預設或直接輸入" required></label>
+        <label class="field"><span>子類型</span><input name="subtype" type="text"></label>
+        <label class="field"><span>金融機構</span><input name="institution" type="text"></label>
+        <label class="field"><span>地區</span><input name="countryOrRegion" type="text"></label>
+        <label class="field"><span>幣別 *</span><select name="currency" required></select></label>
+        <label class="field"><span>目前估值匯率</span><input name="currentFx" type="number" min="0.000001" step="0.000001" placeholder="TWD 可留 1；USD 必填"></label>
+        <label class="field"><span>用途 *</span><input name="purpose" type="text" placeholder="可選預設或直接輸入" required></label>
+        <label class="field"><span>連結帳戶</span><select name="linkedAccountId"></select></label>
+        <label class="field"><span>顯示順序</span><input name="displayOrder" type="number" step="1"></label>
+        <label class="field field-wide"><span>備註</span><textarea name="note"></textarea></label>
+      </div>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="account-dialog">取消</button><button class="primary-button" type="submit">儲存帳戶</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="balance-dialog">
+    <form id="balance-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">ACCOUNT BALANCE</p><h2>新增或編輯餘額</h2></div><button class="dialog-close" type="button" data-close-dialog="balance-dialog">×</button></div>
+      <input name="balanceId" type="hidden"><input name="accountId" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>餘額 *</span><input name="amount" type="number" min="0" step="0.01" required></label>
+        <label class="field"><span>餘額日期 *</span><input name="balanceDate" type="date" required></label>
+        <label class="field field-wide"><span>備註</span><textarea name="note"></textarea></label>
+      </div>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="balance-dialog">取消</button><button class="primary-button" type="submit">儲存餘額</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="policy-dialog">
+    <form id="policy-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">INSURANCE POLICY</p><h2>新增或編輯保單</h2></div><button class="dialog-close" type="button" data-close-dialog="policy-dialog">×</button></div>
+      <input name="policyId" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>保單名稱 *</span><input name="name" type="text" required></label>
+        <label class="field"><span>保險公司</span><input name="insurer" type="text"></label>
+        <label class="field"><span>類別 *</span><input name="category" type="text" placeholder="可選預設或直接輸入" required></label>
+        <label class="field"><span>被保險人</span><input name="insuredPerson" type="text"></label>
+        <label class="field"><span>要保人</span><input name="policyholder" type="text"></label>
+        <label class="field"><span>繳費頻率 *</span><input name="paymentFrequency" type="text" placeholder="可選預設或直接輸入" required></label>
+        <label class="field"><span>保費</span><input name="premiumAmount" type="number" min="0" step="0.01"></label>
+        <label class="field"><span>下次繳費日</span><input name="nextPaymentDate" type="date"></label>
+        <label class="field"><span>繳費結束日</span><input name="paymentEndDate" type="date"></label>
+        <label class="field"><span>保障金額</span><input name="coverageAmount" type="number" min="0" step="0.01"></label>
+        <label class="field"><span>目前保單價值</span><input name="currentCashValue" type="number" min="0" step="0.01"></label>
+        <label class="field"><span>保單價值幣別 *</span><select name="cashValueCurrency" required></select></label>
+        <label class="field"><span>目前估值匯率</span><input name="currentFx" type="number" min="0.000001" step="0.000001" placeholder="TWD 可留 1；USD 必填"></label>
+        <label class="field"><span>保單價值日期</span><input name="cashValueDate" type="date"></label>
+        <label class="field"><span>狀態 *</span><input name="status" type="text" placeholder="可選預設或直接輸入" required></label>
+        <label class="checkbox-field field-wide"><input name="includeInNetWorth" type="checkbox"> 將目前保單價值計入淨資產</label>
+        <label class="field field-wide"><span>保障摘要</span><textarea name="coverageSummary"></textarea></label>
+        <label class="field field-wide"><span>受益人備註</span><textarea name="beneficiaryNote"></textarea></label>
+        <label class="field field-wide"><span>備註</span><textarea name="note"></textarea></label>
+      </div>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="policy-dialog">取消</button><button class="primary-button" type="submit">儲存保單</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="liability-dialog">
+    <form id="liability-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">LIABILITY</p><h2>新增或編輯負債</h2></div><button class="dialog-close" type="button" data-close-dialog="liability-dialog">×</button></div>
+      <input name="liabilityId" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>負債名稱 *</span><input name="name" type="text" required></label>
+        <label class="field"><span>類型 *</span><input name="type" type="text" placeholder="可選預設或直接輸入" required></label>
+        <label class="field"><span>債權人 / 機構</span><input name="lender" type="text"></label>
+        <label class="field"><span>幣別 *</span><select name="currency" required></select></label>
+        <label class="field"><span>目前估值匯率</span><input name="currentFx" type="number" min="0.000001" step="0.000001" placeholder="TWD 可留 1；USD 必填"></label>
+        <label class="field"><span>目前餘額 *</span><input name="currentBalance" type="number" min="0" step="0.01" required></label>
+        <label class="field"><span>原始金額</span><input name="originalAmount" type="number" min="0" step="0.01"></label>
+        <label class="field"><span>利率 %</span><input name="interestRate" type="number" min="0" step="0.0001"></label>
+        <label class="field"><span>最低付款</span><input name="minimumPayment" type="number" min="0" step="0.01"></label>
+        <label class="field"><span>下次付款日</span><input name="nextPaymentDate" type="date"></label>
+        <label class="field"><span>到期日</span><input name="dueDate" type="date"></label>
+        <label class="field"><span>狀態 *</span><input name="status" type="text" placeholder="可選預設或直接輸入" required></label>
+        <label class="field field-wide"><span>備註</span><textarea name="note"></textarea></label>
+      </div>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="liability-dialog">取消</button><button class="primary-button" type="submit">儲存負債</button></div>
+    </form>
+  </dialog>
+<dialog id="stock-dialog">
+    <form id="stock-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">WATCHLIST</p><h2 id="stock-dialog-title">新增研究標的</h2></div><button class="dialog-close" type="button" data-close-dialog="stock-dialog">×</button></div>
+      <input name="stockId" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>股票代號 *</span><input name="ticker" type="text" maxlength="15" placeholder="例如 AAPL" required></label>
+        <label class="field"><span>公司名稱 *</span><input name="companyName" type="text" required></label>
+        <label class="field"><span>市場 *</span><input name="market" type="text" placeholder="例如 美國、台灣" required></label>
+        <label class="field"><span>產業分類 *</span><input name="industry" type="text" required></label>
+        <label class="field"><span>交易幣別 *</span><select name="currency" required><option>TWD</option><option>USD</option></select></label>
+        <label class="field field-wide"><span>題材標籤</span><input name="tags" type="text" placeholder="使用逗號分隔，例如 AI, 半導體, 先進製程"></label>
+        <label class="field"><span>研究階段 *</span><select name="stage" required><option>初步發現</option><option>快速篩選</option><option>深入研究</option><option>等待合理價格</option><option>小額建立部位</option><option>正常持有</option><option>需要重新評估</option><option>退出</option></select></label>
+        <label class="field"><span>合理價格區間</span><input name="fairPriceRange" type="text" placeholder="例如 US$ 100–120"></label>
+        <label class="field"><span>觀察區間下限</span><input name="targetBuyPriceLow" type="number" min="0" step="0.0001"></label>
+        <label class="field"><span>觀察區間上限</span><input name="targetBuyPriceHigh" type="number" min="0" step="0.0001"></label>
+        <label class="field"><span>重新檢查價格</span><input name="reviewPrice" type="number" min="0" step="0.0001"></label>
+        <label class="field field-wide"><span>價格提醒備註</span><input name="priceAlertNote" type="text"></label>
+        <label class="field"><span>下次檢查日期</span><input name="nextReviewDate" type="date"></label>
+        <label class="field"><span>最後更新日期</span><input name="lastUpdatedDate" type="date"></label>
+        <label class="field field-wide"><span>Business Overview</span><textarea name="businessOverview"></textarea></label>
+        <label class="field field-wide"><span>Growth Drivers</span><textarea name="growthDrivers"></textarea></label>
+        <label class="field field-wide"><span>Competitive Advantages</span><textarea name="competitiveAdvantages"></textarea></label>
+        <label class="field field-wide"><span>Valuation Notes</span><textarea name="valuationNotes"></textarea></label>
+        <label class="field field-wide"><span>Sources</span><textarea name="sources" placeholder="一行一個來源，或用逗號分隔"></textarea></label>
+        <label class="field field-wide"><span>Research Notes</span><textarea name="researchNotes"></textarea></label>
+        <label class="field field-wide"><span>投資理由 *</span><textarea name="thesis" required></textarea></label>
+        <label class="field field-wide"><span>最大風險 *</span><textarea name="risk" required></textarea></label>
+        <label class="field field-wide"><span>反證條件 *</span><textarea name="invalidation" required></textarea></label>
+      </div>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="stock-dialog">取消</button><button id="stock-submit-button" class="primary-button" type="submit">加入 Watchlist</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="transaction-dialog">
+    <form id="transaction-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">TRANSACTION</p><h2 id="transaction-dialog-title">新增交易紀錄</h2></div><button class="dialog-close" type="button" data-close-dialog="transaction-dialog">×</button></div>
+      <input name="transactionId" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>股票 *</span><select name="stockId" required></select></label>
+        <label class="field"><span>日期 *</span><input name="date" type="date" required></label>
+        <label class="field"><span>操作類型 *</span><select name="type" required><option value="buy">初始建立部位</option><option value="add">加碼</option><option value="reduce">減碼</option><option value="exit">完全退出</option></select></label>
+        <label class="field"><span>股數 *</span><input name="shares" type="number" min="0.0001" step="0.0001" required></label>
+        <label class="field"><span>成交價格 *</span><input name="price" type="number" min="0.0001" step="0.0001" required></label>
+        <label class="field"><span>幣別 *</span><select name="currency" required><option>TWD</option><option>USD</option></select></label>
+        <label class="field"><span>交易時匯率 *</span><input name="exchangeRate" type="number" min="0.000001" step="0.000001" required></label>
+        <label class="field field-wide"><span>交易理由 *</span><textarea name="reason" required></textarea></label>
+        <label class="field field-wide"><span>檢查條件</span><textarea name="checkingCondition"></textarea></label>
+        <label class="field field-wide"><span>備註</span><textarea name="note"></textarea></label>
+        <label class="checkbox-field field-wide"><input name="createJournal" type="checkbox"> 同時建立 Journal Entry</label>
+      </div>
+      <p class="form-help">完全退出會自動使用目前剩餘股數。減碼不會改變剩餘持股的平均成本。</p>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="transaction-dialog">取消</button><button class="primary-button" type="submit">儲存交易</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="journal-dialog">
+    <form id="journal-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">DECISION JOURNAL</p><h2 id="journal-dialog-title">新增投資決策紀錄</h2></div><button class="dialog-close" type="button" data-close-dialog="journal-dialog">×</button></div>
+      <input name="journalId" type="hidden">
+      <p id="decision-template-description" class="form-help">請先選擇 Decision Type，表單會自動切換適合的欄位。</p>
+      <div class="form-grid">
+        <label class="field"><span>Related Ticker</span><select name="stockId"></select></label>
+        <label class="field"><span>日期 *</span><input name="date" type="date" required></label>
+        <label class="field"><span>Decision Type *</span><select name="entryType" required></select></label>
+        <label class="field"><span>Execution Status *</span><select name="executionStatus" required></select></label>
+        <label class="field"><span>Related Transaction</span><select name="transactionId"></select></label>
+        <label class="field"><span>Thesis Version</span><select name="thesisVersionId"></select></label>
+        <label class="field"><span>Confidence *</span><input name="confidence" type="number" min="1" max="10" step="1" required></label>
+        <label class="field"><span>Price</span><input name="price" type="number" min="0" step="0.0001"></label>
+        <label class="field"><span>Quantity</span><input name="quantity" type="number" min="0" step="0.0001"></label>
+        <label class="field"><span>Expected Return</span><input name="expectedReturn" type="text"></label>
+        <label class="field"><span>Holding Period</span><input name="holdingPeriod" type="text"></label>
+        <label class="field"><span>Next Review Date</span><input name="nextReviewDate" type="date"></label>
+        <label class="field field-wide"><span>Planned Action</span><input name="plannedAction" type="text" placeholder="例如 等待合理價格、下次財報後再評估"></label>
+        <label class="field field-wide"><span>Supporting Evidence</span><textarea name="supportingEvidence"></textarea></label>
+        <input name="researchId" type="hidden">
+        <label class="field field-wide"><span>標題</span><input name="title" type="text"></label>
+        <label class="field field-wide"><span>Tags</span><input name="tags" type="text" placeholder="使用逗號分隔，例如 Long Term, Tax"></label>
+        <label class="field field-wide"><span>Investment Thesis / Why *</span><textarea name="investmentThesis" required></textarea></label>
+        <label class="field field-wide"><span>Expected Outcome *</span><textarea name="expectedOutcome" required></textarea></label>
+        <label class="field field-wide"><span>Risks *</span><textarea name="risks" required></textarea></label>
+        <label class="field field-wide"><span>Invalidation Conditions</span><textarea name="invalidationConditions"></textarea></label>
+        <label class="field"><span>Review Type</span><select name="reviewType"><option value="">尚未設定</option><option value="30Days">30 Days</option><option value="earnings">Earnings Review</option><option value="quarterly">Quarterly Review</option><option value="custom">Custom Date</option></select></label>
+        <label class="field"><span>Thesis Still Valid</span><select name="thesisStillValid"><option value="">尚未設定</option><option value="yes">Yes</option><option value="uncertain">Uncertain</option><option value="no">No</option></select></label>
+        <label class="field field-wide"><span>What Went Right</span><textarea name="whatWentRight"></textarea></label>
+        <label class="field field-wide"><span>What Went Wrong</span><textarea name="whatWentWrong"></textarea></label>
+        <label class="field field-wide"><span>Lessons Learned Tags</span><input name="lessonsLearned" type="text" placeholder="例如 FOMO, Poor Valuation, No Exit Plan"></label>
+        <label class="field field-wide"><span>Position Adjustment</span><textarea name="positionAdjustment"></textarea></label>
+        <label class="field field-wide"><span>Review Notes</span><textarea name="reviewNotes"></textarea></label>
+        <label class="field field-wide"><span>Follow-up Review</span><textarea name="followUpReview"></textarea></label>
+      </div>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="journal-dialog">取消</button><button class="primary-button" type="submit">儲存決策紀錄</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="company-workspace-dialog">
+    <div class="dialog-form company-workspace-dialog">
+      <div class="dialog-heading">
+        <div><p class="panel-label">COMPANY WORKSPACE</p><h2 id="company-workspace-title">Company Workspace</h2></div>
+        <button class="dialog-close" type="button" data-close-dialog="company-workspace-dialog">×</button>
+      </div>
+      <div id="company-workspace-content"></div>
+      <p id="company-workspace-message" class="form-help" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="primary-button" type="button" data-close-dialog="company-workspace-dialog">完成</button></div>
+    </div>
+  </dialog>
+
+  <dialog id="review-dialog">
+    <form id="review-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">DECISION REVIEW</p><h2 id="review-dialog-title">新增 Decision Review</h2></div><button class="dialog-close" type="button" data-close-dialog="review-dialog">×</button></div>
+      <input name="reviewId" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>Company *</span><select name="companyId" required></select></label>
+        <label class="field"><span>Related Decision *</span><select name="decisionId" required></select></label>
+        <label class="field"><span>Related Transaction</span><select name="transactionId"></select></label>
+        <label class="field"><span>Review Date *</span><input name="reviewDate" type="date" required></label>
+        <label class="field"><span>Review Type *</span><select name="reviewType" required></select></label>
+        <label class="field"><span>Outcome *</span><select name="outcome" required></select></label>
+        <p id="review-template-help" class="form-help field-wide">請先選擇 Review Type。</p>
+        <label class="field field-wide"><span>What Went Well</span><textarea name="whatWentWell"></textarea></label>
+        <label class="field field-wide"><span>What Went Wrong</span><textarea name="whatWentWrong"></textarea></label>
+        <label class="field field-wide"><span>Unexpected Events</span><textarea name="unexpectedEvents"></textarea></label>
+        <label class="field field-wide"><span>Lessons Learned</span><textarea name="lessonsLearned"></textarea></label>
+        <label class="field field-wide"><span>Next Improvement</span><textarea name="nextImprovement"></textarea></label>
+        <label class="field field-wide"><span>Confidence Reflection</span><textarea name="confidenceReflection"></textarea></label>
+        <label class="field"><span>Reminder Preset</span><select name="reminderPreset"><option value="">不設定</option><option value="30">30 Days</option><option value="90">90 Days</option><option value="180">180 Days</option><option value="365">365 Days</option></select></label>
+        <label class="field"><span>Reminder Date</span><input name="reminderDate" type="date"></label>
+        <label class="field field-wide"><span>Tags</span><input name="tags" type="text" placeholder="例如 FOMO, Good Position Size"></label>
+        <label class="field field-wide"><span>Notes</span><textarea name="notes"></textarea></label>
+      </div>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="review-dialog">取消</button><button class="primary-button" type="submit">儲存 Review</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="lesson-dialog">
+    <form id="lesson-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">LESSON LEARNED</p><h2 id="lesson-dialog-title">新增 Lesson</h2></div><button class="dialog-close" type="button" data-close-dialog="lesson-dialog">×</button></div>
+      <input name="lessonId" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>Company</span><select name="companyId"></select></label>
+        <label class="field"><span>Related Review</span><select name="relatedReviews"></select></label>
+        <label class="field"><span>Lesson Type *</span><select name="kind" required></select></label>
+        <label class="field"><span>Category *</span><select name="category" required></select></label>
+        <label class="field field-wide"><span>Title *</span><input name="title" type="text" list="lesson-template-list" required></label>
+        <datalist id="lesson-template-list">
+          <option value="Bought Too Early"></option>
+          <option value="Sold Too Early"></option>
+          <option value="Ignored Risk"></option>
+          <option value="Chased Momentum"></option>
+          <option value="No Exit Plan"></option>
+          <option value="Position Too Large"></option>
+          <option value="Thesis Played Out"></option>
+          <option value="Good Position Size"></option>
+          <option value="Patient Holding"></option>
+          <option value="Proper Risk Control"></option>
+          <option value="Bought During Panic"></option>
+        </datalist>
+        <label class="field"><span>Importance</span><select name="importance"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label>
+        <label class="toggle-label"><input name="isReusable" type="checkbox" checked> 可重複使用</label>
+        <label class="field field-wide"><span>Description *</span><textarea name="description" required></textarea></label>
+        <label class="field field-wide"><span>Tags</span><input name="tags" type="text" placeholder="例如 Risk, Timing, Family"></label>
+      </div>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="lesson-dialog">取消</button><button class="primary-button" type="submit">儲存 Lesson</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="delete-stock-dialog">
+    <form id="delete-stock-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">DELETE WATCHLIST ITEM</p><h2>刪除研究標的</h2></div><button class="dialog-close" type="button" data-close-dialog="delete-stock-dialog">×</button></div>
+      <input name="stockId" type="hidden">
+      <p id="delete-stock-message" class="form-help"></p>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="delete-stock-dialog">取消</button><button class="primary-button danger-button" type="submit">確認刪除</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="cash-flow-entry-dialog">
+    <form id="cash-flow-entry-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">CASH FLOW ENTRY</p><h2 id="cash-flow-entry-title">新增 Cash Flow Entry</h2></div><button class="dialog-close" type="button" data-close-dialog="cash-flow-entry-dialog">×</button></div>
+      <input name="entryId" type="hidden">
+      <div class="form-grid">
+        <label class="field" data-entry-field="common"><span>類型 *</span><select name="type" required><option value="income">Income</option><option value="expense">Expense</option><option value="transfer">Transfer</option></select></label>
+        <label class="field" data-entry-field="common"><span>日期 *</span><input name="date" type="date" required></label>
+        <label class="field" data-entry-field="common"><span>金額 *</span><input name="amount" type="number" min="0.01" step="0.01" required></label>
+        <label class="field" data-entry-field="common"><span>幣別 *</span><select name="currency" required><option>TWD</option><option>USD</option></select></label>
+        <label class="field" data-entry-field="common"><span>建立當下 Exchange Rate *</span><input name="exchangeRate" type="number" min="0.000001" step="0.000001" required></label>
+        <label class="field" data-entry-field="income"><span>收入分類</span><select name="categoryId"></select></label>
+        <label class="field" data-entry-field="expense"><span>支出分類</span><select name="categoryId"></select></label>
+        <label class="field" data-entry-field="expense"><span>付款方式 *</span><select name="paymentMethod"></select></label>
+        <label class="field" data-entry-field="income"><span>入帳帳戶 *</span><select name="accountId"></select></label>
+        <label class="field" data-entry-field="expense"><span>付款帳戶</span><select name="accountId"></select></label>
+        <label class="field" data-entry-field="expense"><span>信用卡負債</span><select name="liabilityId"></select></label>
+        <label class="field" data-entry-field="transfer"><span>Transfer 類型 *</span><select name="transferType"><option value="assetToAsset">Asset → Asset</option><option value="assetToCreditCard">Asset → Credit Card</option></select></label>
+        <label class="field" data-entry-field="transfer"><span>轉出帳戶 *</span><select name="accountId"></select></label>
+        <label class="field" data-entry-field="transfer"><span>轉入帳戶</span><select name="toAccountId"></select></label>
+        <label class="field" data-entry-field="transfer"><span>信用卡負債</span><select name="liabilityId"></select></label>
+        <label class="field field-wide" data-entry-field="common"><span>標題</span><input name="title" type="text"></label>
+        <label class="field field-wide" data-entry-field="common"><span>Tags</span><input name="tags" type="text" placeholder="使用逗號分隔，例如 Family, Tax"></label>
+        <label class="field field-wide" data-entry-field="common"><span>備註</span><textarea name="note"></textarea></label>
+      </div>
+      <p class="form-help">Credit Card 支出會增加信用卡負債；信用卡繳款請使用 Transfer 的 Asset → Credit Card。</p>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="cash-flow-entry-dialog">取消</button><button class="primary-button" type="submit">儲存 Entry</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="cash-flow-category-dialog">
+    <form id="cash-flow-category-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">CATEGORY</p><h2 id="cash-flow-category-title">新增分類</h2></div><button class="dialog-close" type="button" data-close-dialog="cash-flow-category-dialog">×</button></div>
+      <input name="categoryId" type="hidden"><input name="categoryType" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>分類名稱 *</span><input name="name" type="text" required></label>
+        <label class="field"><span>顯示順序</span><input name="displayOrder" type="number" step="1"></label>
+      </div>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="cash-flow-category-dialog">取消</button><button class="primary-button" type="submit">儲存分類</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="category-management-dialog">
+    <div class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">CASH FLOW CATEGORIES</p><h2>分類管理</h2></div><button class="dialog-close" type="button" data-close-dialog="category-management-dialog">×</button></div>
+      <p class="form-help">分類屬於低頻設定；封存後不會出現在新增 Entry 的分類下拉選單，但歷史紀錄仍會保留原分類名稱。</p>
+      <div class="dashboard-grid dashboard-lower-grid">
+        <article class="panel">
+          <div class="panel-heading"><div><p class="panel-label">INCOME CATEGORIES</p><h2>收入分類</h2></div><button class="secondary-button" type="button" data-open-category="income">＋ 新增收入分類</button></div>
+          <div id="income-category-list" class="asset-list"></div>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><p class="panel-label">EXPENSE CATEGORIES</p><h2>支出分類</h2></div><button class="secondary-button" type="button" data-open-category="expense">＋ 新增支出分類</button></div>
+          <div id="expense-category-list" class="asset-list"></div>
+        </article>
+      </div>
+      <div class="dialog-actions"><button class="primary-button" type="button" data-close-dialog="category-management-dialog">完成</button></div>
+    </div>
+  </dialog>
+
+  <dialog id="data-management-dialog">
+    <div class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">DATA MANAGEMENT</p><h2>資料管理</h2></div><button class="dialog-close" type="button" data-close-dialog="data-management-dialog">×</button></div>
+      <div class="dashboard-grid dashboard-lower-grid">
+        <article class="panel">
+          <div class="panel-heading"><div><p class="panel-label">BACKUP</p><h2>備份與還原</h2></div></div>
+          <p class="form-help">Export 會下載完整 JSON。Import 會先驗證與預覽，不會直接覆蓋資料。</p>
+          <div class="record-actions">
+            <button class="primary-button" type="button" data-export-backup>Export Backup (.json)</button>
+            <label class="secondary-button file-button">Import Backup (.json)<input id="backup-file-input" type="file" accept="application/json,.json" hidden></label>
+          </div>
+          <div class="record-actions">
+            <button id="restore-previous-state-button" class="secondary-button" type="button" data-restore-previous-state disabled>Restore Previous State</button>
+          </div>
+          <p id="recovery-backup-status" class="form-help">目前沒有可回復的版本。</p>
+          <div id="import-summary" class="import-summary empty-state">尚未選擇備份檔。</div>
+          <div class="record-actions">
+            <button class="secondary-button" type="button" data-apply-import="merge" disabled>Merge</button>
+            <button class="secondary-button danger-button" type="button" data-apply-import="replace" disabled>Replace</button>
+          </div>
+          <p id="data-management-message" class="form-help"></p>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><p class="panel-label">INTEGRITY</p><h2>資料完整性</h2></div></div>
+          <button class="secondary-button" type="button" data-run-integrity-check>執行檢查</button>
+          <div id="integrity-result" class="asset-list"></div>
+        </article>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="recurring-dialog">
+    <form id="recurring-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">RECURRING</p><h2>新增或編輯 Recurring</h2></div><button class="dialog-close" type="button" data-close-dialog="recurring-dialog">×</button></div>
+      <input name="recurringId" type="hidden">
+      <div class="form-grid">
+        <label class="field" data-recurring-field="common"><span>類型 *</span><select name="type" required><option value="income">Recurring Income</option><option value="expense">Recurring Expense</option></select></label>
+        <label class="field field-wide" data-recurring-field="common"><span>標題 *</span><input name="title" type="text" required></label>
+        <label class="field" data-recurring-field="common"><span>金額 *</span><input name="amount" type="number" min="0.01" step="0.01" required></label>
+        <label class="field" data-recurring-field="common"><span>幣別 *</span><select name="currency" required><option>TWD</option><option>USD</option></select></label>
+        <label class="field" data-recurring-field="common"><span>Exchange Rate *</span><input name="exchangeRate" type="number" min="0.000001" step="0.000001" required></label>
+        <label class="field" data-recurring-field="common"><span>頻率 *</span><select name="frequency" required></select></label>
+        <label class="field" data-recurring-field="common"><span>下次到期日 *</span><input name="nextDueDate" type="date" required></label>
+        <label class="field" data-recurring-field="income"><span>收入分類</span><select name="categoryId"></select></label>
+        <label class="field" data-recurring-field="expense"><span>支出分類</span><select name="categoryId"></select></label>
+        <label class="field" data-recurring-field="income"><span>入帳帳戶 *</span><select name="accountId"></select></label>
+        <label class="field" data-recurring-field="expense"><span>付款方式 *</span><select name="paymentMethod"></select></label>
+        <label class="field" data-recurring-field="expense"><span>付款帳戶</span><select name="accountId"></select></label>
+        <label class="field" data-recurring-field="expense"><span>信用卡負債</span><select name="liabilityId"></select></label>
+        <label class="field field-wide" data-recurring-field="common"><span>備註</span><textarea name="note"></textarea></label>
+      </div>
+      <p class="form-help">不做背景排程；App 開啟後顯示到期項目，使用者按確認才建立 Entry。</p>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="recurring-dialog">取消</button><button class="primary-button" type="submit">儲存 Recurring</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="budget-dialog">
+    <form id="budget-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">MONTHLY BUDGET</p><h2>設定每月分類預算</h2></div><button class="dialog-close" type="button" data-close-dialog="budget-dialog">×</button></div>
+      <div class="form-grid">
+        <label class="field"><span>月份 *</span><input name="month" type="month" required></label>
+        <label class="field"><span>支出分類 *</span><select name="categoryId" required></select></label>
+        <label class="field"><span>Budget *</span><input name="amount" type="number" min="0" step="0.01" required></label>
+        <label class="field"><span>幣別 *</span><select name="currency" required><option>TWD</option><option>USD</option></select></label>
+        <label class="field"><span>Exchange Rate *</span><input name="exchangeRate" type="number" min="0.000001" step="0.000001" required></label>
+      </div>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="budget-dialog">取消</button><button class="primary-button" type="submit">儲存 Budget</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="thesis-dialog">
+    <form id="thesis-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">THESIS REVIEW</p><h2 id="thesis-dialog-title">重新檢查 Thesis</h2></div><button class="dialog-close" type="button" data-close-dialog="thesis-dialog">×</button></div>
+      <input name="stockId" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>理由仍成立？ *</span><select name="stillValid" required><option value="yes">是</option><option value="uncertain">不確定</option><option value="no">否</option></select></label>
+        <label class="field"><span>Thesis 狀態 *</span><select name="thesisStatus" required><option value="active">理由仍成立</option><option value="needsReview">需要重新檢查</option><option value="weakening">理由可能弱化</option><option value="invalidated">理由已被推翻</option><option value="archived">已封存</option></select></label>
+        <label class="field"><span>預期持有期間</span><input name="expectedTimeHorizon" type="text"></label>
+        <label class="field"><span>下一次檢查日期</span><input name="nextReviewDate" type="date"></label>
+        <label class="field field-wide"><span>Current Thesis *</span><textarea name="thesisSummary" required></textarea></label>
+        <label class="field field-wide"><span>最近新資訊</span><textarea name="newInformation"></textarea></label>
+        <label class="field field-wide"><span>催化劑與是否發生</span><textarea name="catalysts"></textarea></label>
+        <label class="field field-wide"><span>主要風險與是否提高</span><textarea name="mainRisks"></textarea></label>
+        <label class="field field-wide"><span>反證條件與是否觸發</span><textarea name="invalidationConditions"></textarea></label>
+        <label class="field"><span>調整合理價格區間</span><input name="fairPriceRange" type="text"></label>
+        <label class="field"><span>變更原因 *</span><input name="changeReason" type="text" required></label>
+      </div>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="thesis-dialog">取消</button><button class="primary-button" type="submit">儲存 Thesis Review</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="price-dialog">
+    <form id="price-form" class="dialog-form">
+      <div class="dialog-heading"><div><p class="panel-label">MANUAL PRICE</p><h2>編輯目前價格</h2></div><button class="dialog-close" type="button" data-close-dialog="price-dialog">×</button></div>
+      <input name="stockId" type="hidden">
+      <label class="field"><span id="price-currency-label">目前價格 *</span><input name="currentPrice" type="number" min="0.0001" step="0.0001" required></label>
+      <label class="field"><span>目前估值匯率</span><input name="currentFx" type="number" min="0.000001" step="0.000001" placeholder="TWD 可留 1；USD 必填"></label>
+      <p class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="text-button" type="button" data-close-dialog="price-dialog">取消</button><button class="primary-button" type="submit">儲存價格</button></div>
+    </form>
+  </dialog>
+</body>
+</html>
+

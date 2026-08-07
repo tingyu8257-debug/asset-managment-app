@@ -1,0 +1,17 @@
+{
+  "name": "core-satellite-research",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node server.js",
+    "build:ios-web": "node scripts/build-capacitor-web.cjs",
+    "cap:sync:ios": "npm run build:ios-web && npx cap sync ios",
+    "cap:open:ios": "npm run cap:sync:ios && npx cap open ios",
+    "test": "node tests/milestone3.test.cjs && node tests/milestone4.test.cjs && node tests/milestoneB.test.cjs && node tests/milestoneC-net-worth.test.cjs && node tests/milestoneC-dashboard-ui.test.cjs && node tests/milestoneC-calculation-layer.test.cjs && node tests/investment-repositories.test.cjs && node tests/milestoneD-cash-flow.test.cjs && node tests/milestoneE-data-management.test.cjs && node tests/milestoneF-research-system.test.cjs && node tests/milestoneG-data-quality-ux.test.cjs && node tests/milestoneH-decision-system.test.cjs && node tests/milestoneI-review-lessons.test.cjs && node tests/milestoneJ-pwa.test.cjs"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/ios": "^8.5.0"
+  }
+}
