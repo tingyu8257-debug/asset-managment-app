@@ -14,6 +14,7 @@ window.PortfolioRouter = (() => {
     "stocks-reviews": "reviews",
     "portfolio-stocks-reviews": "reviews",
     "portfolio": "positions",
+    "investment": "research-dashboard",
     "research": "research-dashboard",
     "accounts": "accounts",
     "insurance": "insurance",
