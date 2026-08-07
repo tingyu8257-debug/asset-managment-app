@@ -1,5 +1,5 @@
 (typeof window !== "undefined" ? window : globalThis).DashboardView = (() => {
-  function create({ byId, escapeHtml, formatMoney, formatPercent, calculationService }) {
+  function create({ state = {}, byId, escapeHtml, formatMoney, formatPercent, calculationService }) {
     const currency = window.AppConstants.DASHBOARD_CURRENCY;
 
     function renderDashboard() {
@@ -13,16 +13,53 @@
       byId("dashboard-total-assets").textContent = formatMoney(assets.total, currency);
       byId("dashboard-total-liabilities").textContent = formatMoney(liabilities.total, currency);
       byId("dashboard-liability-note").textContent = `${liabilities.items.length} 筆有效負債`;
-      byId("dashboard-cash").textContent = formatMoney(assets.cash.total, currency);
-      byId("dashboard-cash-note").textContent = `${assets.cash.items.filter((item) => item.latestBalance).length} 個有餘額帳戶`;
-      byId("dashboard-investments").textContent = formatMoney(assets.investments.total, currency);
-      byId("dashboard-investments-note").textContent = `${assets.investments.items.length} 個持有部位`;
-      byId("dashboard-insurance").textContent = formatMoney(assets.insurance.total, currency);
-      byId("dashboard-insurance-note").textContent = `${assets.insurance.items.length} 張計入淨資產保單`;
+      renderMobileSummary(assets);
 
       renderAllocation(dashboard.allocation, assets);
       renderLatestActivity(dashboard.latestActivity);
       renderWarnings(dashboard.warnings);
+    }
+
+    function renderMobileSummary(assets) {
+      const cashFlow = getThisMonthCashFlow();
+      byId("dashboard-this-month-cash-flow").textContent = formatMoney(cashFlow.net, currency);
+      byId("dashboard-cash-flow-note").textContent = `${formatMoney(cashFlow.income, currency)} - ${formatMoney(cashFlow.expense, currency)}`;
+      byId("dashboard-portfolio-summary").textContent = formatMoney(assets.investments.total, currency);
+      byId("dashboard-portfolio-note").textContent = `${assets.investments.items.length} positions`;
+      const reminder = getUpcomingReminder();
+      byId("dashboard-upcoming-reminder").textContent = reminder.title;
+      byId("dashboard-upcoming-note").textContent = reminder.note;
+    }
+
+    function getThisMonthCashFlow() {
+      const month = new Date().toISOString().slice(0, 7);
+      return (state.cashFlowEntries || [])
+        .filter((entry) => String(entry.date || "").slice(0, 7) === month)
+        .reduce((summary, entry) => {
+          const amount = Number(entry.amount) * Number(entry.exchangeRate || 1);
+          if (!Number.isFinite(amount)) return summary;
+          if (entry.type === "income") summary.income += amount;
+          if (entry.type === "expense") summary.expense += amount;
+          summary.net = summary.income - summary.expense;
+          return summary;
+        }, { income: 0, expense: 0, net: 0 });
+    }
+
+    function getUpcomingReminder() {
+      const today = new Date().toISOString().slice(0, 10);
+      const recurring = (state.recurringCashFlows || [])
+        .filter((item) => !item.isArchived && item.nextDueDate)
+        .map((item) => ({ date: item.nextDueDate, title: item.title || "Recurring", note: item.type || "Cash Flow" }));
+      const reviews = (state.investmentReviews || [])
+        .filter((item) => !item.isArchived && item.reminderDate)
+        .map((item) => ({ date: item.reminderDate, title: item.ticker || "Review", note: item.reviewType || "Review" }));
+      const research = (state.watchlistStocks || [])
+        .filter((item) => item.nextReviewDate)
+        .map((item) => ({ date: item.nextReviewDate, title: item.ticker || item.companyName || "Research", note: "Next Review" }));
+      const next = [...recurring, ...reviews, ...research]
+        .sort((a, b) => String(a.date).localeCompare(String(b.date)))[0];
+      if (!next) return { title: "No reminder", note: "All clear" };
+      return { title: next.title, note: `${next.date}${next.date < today ? " due" : ""} · ${next.note}` };
     }
 
     function renderAllocation(allocation, assets) {

@@ -9,6 +9,7 @@
   const portfolioRouter = window.PortfolioRouter.create({ registry: portfolioRegistry });
   const calculationService = window.CalculationService.create({ state, getAllCalculatedPositions, getStock });
   const dashboardView = window.DashboardView.create({
+    state,
     byId,
     escapeHtml,
     formatMoney,
@@ -161,6 +162,34 @@
     document.querySelector("[data-quick-actions-toggle]")?.setAttribute("aria-expanded", "false");
   }
 
+  function closeWorkspaceMenu() {
+    document.body.classList.remove("workspace-menu-open");
+    document.querySelector("[data-workspace-menu-toggle]")?.setAttribute("aria-expanded", "false");
+    byId("mobile-workspace-menu").hidden = true;
+    document.querySelector(".sheet-backdrop").hidden = true;
+  }
+
+  function toggleWorkspaceMenu() {
+    const isOpen = !document.body.classList.contains("workspace-menu-open");
+    document.body.classList.toggle("workspace-menu-open", isOpen);
+    document.querySelector("[data-workspace-menu-toggle]")?.setAttribute("aria-expanded", String(isOpen));
+    byId("mobile-workspace-menu").hidden = !isOpen;
+    document.querySelector(".sheet-backdrop").hidden = !isOpen;
+    if (isOpen) document.body.classList.remove("mobile-filters-open");
+  }
+
+  function closeMobileFilters() {
+    document.body.classList.remove("mobile-filters-open");
+    document.querySelector(".sheet-backdrop").hidden = !document.body.classList.contains("workspace-menu-open");
+  }
+
+  function toggleMobileFilters() {
+    const isOpen = !document.body.classList.contains("mobile-filters-open");
+    if (isOpen) closeWorkspaceMenu();
+    document.body.classList.toggle("mobile-filters-open", isOpen);
+    document.querySelector(".sheet-backdrop").hidden = !isOpen;
+  }
+
   function toggleQuickActions() {
     const isOpen = document.body.classList.toggle("quick-actions-open");
     document.querySelector("[data-quick-actions-toggle]")?.setAttribute("aria-expanded", String(isOpen));
@@ -168,6 +197,8 @@
 
   function updateActiveNavigation() {
     const hash = portfolioRouter.syncHash();
+    document.body.dataset.route = hash;
+    document.querySelector(".mobile-home-button")?.classList.toggle("is-hidden", hash === "dashboard");
     document.querySelectorAll("[data-nav-group]").forEach((group) => group.classList.remove("nav-has-active"));
     document.querySelectorAll(".main-nav .nav-link").forEach((link) => {
       const isActive = link.getAttribute("href") === `#${hash}`;
@@ -231,6 +262,23 @@
       toggleQuickActions();
       return;
     }
+    if (target.dataset.workspaceMenuToggle !== undefined) {
+      toggleWorkspaceMenu();
+      return;
+    }
+    if (target.dataset.sheetClose !== undefined) {
+      closeWorkspaceMenu();
+      closeMobileFilters();
+      return;
+    }
+    if (target.dataset.filterToggle !== undefined) {
+      toggleMobileFilters();
+      return;
+    }
+    if (target.dataset.workspaceLink !== undefined) {
+      closeWorkspaceMenu();
+      closeMobileFilters();
+    }
     if (target.dataset.navMenu) {
       const group = target.closest("[data-nav-group]");
       const isOpen = group.classList.toggle("nav-open");
@@ -241,6 +289,8 @@
     if (target.classList.contains("nav-link") || target.classList.contains("nav-menu-button")) {
       closeNavMenus();
       closeMobileNavigation();
+      closeWorkspaceMenu();
+      closeMobileFilters();
       updateActiveNavigation();
     }
     if (target.classList.contains("search-result-item")) {
@@ -383,10 +433,14 @@
       closeNavMenus();
       closeMobileNavigation();
       closeQuickActions();
+      closeWorkspaceMenu();
+      closeMobileFilters();
     }
   });
   window.addEventListener("hashchange", () => {
     portfolioRouter.getCurrentPortfolioModule();
+    closeWorkspaceMenu();
+    closeMobileFilters();
     updateActiveNavigation();
   });
 

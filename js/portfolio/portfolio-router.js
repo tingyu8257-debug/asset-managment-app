@@ -12,7 +12,13 @@ window.PortfolioRouter = (() => {
     "portfolio-stocks-journal": "journal",
     "stock-reviews": "reviews",
     "stocks-reviews": "reviews",
-    "portfolio-stocks-reviews": "reviews"
+    "portfolio-stocks-reviews": "reviews",
+    "portfolio": "positions",
+    "research": "research-dashboard",
+    "accounts": "accounts",
+    "insurance": "insurance",
+    "liabilities": "liabilities",
+    "records": "records"
   };
 
   function create({ registry }) {

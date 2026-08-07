@@ -60,6 +60,7 @@
           <small>投資研究室</small>
         </span>
       </a>
+      <a class="mobile-home-button" href="#dashboard" aria-label="回 Dashboard">⌂</a>
       <button class="mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" data-mobile-nav-toggle>≡</button>
       <nav id="main-navigation" class="main-nav" aria-label="主要導覽">
         <a class="nav-link" href="#dashboard">Dashboard</a>
@@ -99,6 +100,25 @@
       <button class="primary-button open-stock-dialog-button" type="button">＋ 新增研究標的</button>
     </div>
   </header>
+
+  <button class="floating-menu-button" type="button" aria-expanded="false" aria-controls="mobile-workspace-menu" data-workspace-menu-toggle>≡</button>
+  <div class="sheet-backdrop" data-sheet-close hidden></div>
+  <aside id="mobile-workspace-menu" class="bottom-sheet-menu" aria-label="Workspace menu" hidden>
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-heading">
+      <div><p class="panel-label">WORKSPACES</p><h2>切換功能</h2></div>
+      <button class="dialog-close" type="button" data-sheet-close>×</button>
+    </div>
+    <nav class="workspace-menu-grid">
+      <a href="#positions" data-workspace-link><span>▦</span><strong>Portfolio</strong></a>
+      <a href="#research-dashboard" data-workspace-link><span>⌕</span><strong>Research</strong></a>
+      <a href="#cash-flow" data-workspace-link><span>↕</span><strong>Cash Flow</strong></a>
+      <a href="#accounts" data-workspace-link><span>◫</span><strong>Accounts</strong></a>
+      <a href="#insurance" data-workspace-link><span>◇</span><strong>Insurance</strong></a>
+      <a href="#liabilities" data-workspace-link><span>−</span><strong>Liabilities</strong></a>
+      <a href="#records" data-workspace-link><span>☰</span><strong>Records</strong></a>
+    </nav>
+  </aside>
 
   <div id="pwa-status" class="pwa-status" role="status" aria-live="polite" hidden>
     <span id="pwa-status-text"></span>
@@ -146,29 +166,27 @@
             <strong id="dashboard-total-liabilities">尚未設定</strong>
             <span id="dashboard-liability-note">Current Balance only</span>
           </article>
-        </div>
-
-        <div class="stat-grid dashboard-row-three">
           <article class="stat-card">
-            <p>Cash</p>
-            <strong id="dashboard-cash">尚未設定</strong>
-            <span id="dashboard-cash-note">0 個有餘額帳戶</span>
+            <p>This Month Cash Flow</p>
+            <strong id="dashboard-this-month-cash-flow">尚未設定</strong>
+            <span id="dashboard-cash-flow-note">Income - Expense</span>
           </article>
           <article class="stat-card">
-            <p>Investments</p>
-            <strong id="dashboard-investments">尚未設定</strong>
-            <span id="dashboard-investments-note">0 個持有部位</span>
+            <p>Portfolio</p>
+            <strong id="dashboard-portfolio-summary">尚未設定</strong>
+            <span id="dashboard-portfolio-note">Positions</span>
           </article>
           <article class="stat-card">
-            <p>Insurance Cash Value</p>
-            <strong id="dashboard-insurance">尚未設定</strong>
-            <span id="dashboard-insurance-note">Coverage 不計入</span>
+            <p>Upcoming</p>
+            <strong id="dashboard-upcoming-reminder">尚未設定</strong>
+            <span id="dashboard-upcoming-note">Next reminder</span>
           </article>
         </div>
 
         <article class="allocation-panel dashboard-allocation-panel">
           <div class="allocation-copy">
-            <p class="panel-label">ASSET ALLOCATION</p>
+            <p class="panel-label">ALLOCATION</p>
+            <h2>資產配置</h2>
             <p class="allocation-number">Total Assets <strong id="dashboard-allocation-total">尚未設定</strong></p>
             <p id="dashboard-allocation-summary">Allocation 不包含負債。</p>
           </div>
@@ -184,7 +202,7 @@
 
         <div class="dashboard-grid dashboard-lower-grid">
           <article class="panel">
-            <div class="panel-heading"><div><p class="panel-label">LATEST ACTIVITY</p><h2>最近更新</h2></div></div>
+            <div class="panel-heading"><div><p class="panel-label">ACTIVITY</p><h2>最近更新</h2></div></div>
             <div id="dashboard-latest-activity" class="activity-list"></div>
           </article>
           <article class="panel">
@@ -195,16 +213,20 @@
       </div>
     </section>
 
-    <section id="research-dashboard" class="content-section">
+    <section id="research-dashboard" class="content-section workspace-section">
       <div class="container">
         <div class="section-heading">
           <div>
             <p class="eyebrow">RESEARCH DASHBOARD</p>
             <h2>投資研究總覽</h2>
-            <p>集中檢查缺少研究、即將回顧、過期研究與最近決策。</p>
           </div>
-          <button class="primary-button" type="button" data-quick-action="journal">＋ 新增決策紀錄</button>
+          <div class="api-actions"><button class="secondary-button mobile-filter-button" type="button" data-filter-toggle>Filter</button><button class="primary-button" type="button" data-quick-action="journal">＋ 新增決策紀錄</button></div>
         </div>
+        <nav class="workspace-tabs" aria-label="Research sections">
+          <a class="active" href="#research-dashboard">Companies</a>
+          <a href="#journal">Decisions</a>
+          <a href="#reviews">Reviews</a>
+        </nav>
         <div class="toolbar research-toolbar">
           <label class="field search-field"><span>搜尋 Research</span><input id="research-dashboard-search" type="search" placeholder="Symbol、公司、研究內容或 Tags"></label>
           <label class="field"><span>研究狀態</span><select id="research-dashboard-status-filter"><option value="all">All</option><option value="hasResearch">Has Research</option><option value="missingResearch">Missing Research</option><option value="needsReview">Needs Review</option><option value="outdated">Outdated</option></select></label>
@@ -222,16 +244,20 @@
       </div>
     </section>
 
-    <section id="watchlist" class="content-section">
+    <section id="watchlist" class="content-section workspace-section">
       <div class="container">
         <div class="section-heading">
           <div>
             <p class="eyebrow">WATCHLIST</p>
             <h2>研究觀察清單</h2>
-            <p>從初步發現到退出，保留每個標的的研究脈絡。</p>
           </div>
-          <button class="primary-button open-stock-dialog-button" type="button">＋ 新增標的</button>
+          <div class="api-actions"><button class="secondary-button mobile-filter-button" type="button" data-filter-toggle>Filter</button><button class="primary-button open-stock-dialog-button" type="button">＋ 新增標的</button></div>
         </div>
+        <nav class="workspace-tabs" aria-label="Research sections">
+          <a href="#research-dashboard">Companies</a>
+          <a href="#journal">Decisions</a>
+          <a href="#reviews">Reviews</a>
+        </nav>
 
         <div class="toolbar">
           <label class="field search-field">
@@ -261,16 +287,20 @@
         <div id="watchlist-grid" class="watchlist-grid"></div>
       </div>
     </section>
-<section id="positions" class="content-section alternate-section">
+<section id="positions" class="content-section alternate-section workspace-section">
       <div class="container">
         <div class="section-heading">
           <div>
             <p class="eyebrow">POSITION MANAGER</p>
             <h2>衛星部位管理</h2>
-            <p>手動更新價格，檢查部位大小與集中程度。</p>
           </div>
           <button id="open-general-transaction-button" class="primary-button" type="button">＋ 新增交易紀錄</button>
         </div>
+        <nav class="workspace-tabs" aria-label="Portfolio sections">
+          <a class="active" href="#positions">Positions</a>
+          <a href="#positions">Transactions</a>
+          <a href="#research-dashboard">Research</a>
+        </nav>
 
         <div class="table-wrap">
           <table>
@@ -289,16 +319,20 @@
       </div>
     </section>
 
-    <section id="journal" class="content-section">
+    <section id="journal" class="content-section workspace-section">
       <div class="container">
         <div class="section-heading">
           <div>
             <p class="eyebrow">RESEARCH JOURNAL</p>
             <h2>研究與決策紀錄</h2>
-            <p>保存當下的判斷，避免事後用結果改寫記憶。</p>
           </div>
-          <button id="open-journal-button" class="primary-button" type="button">＋ 新增紀錄</button>
+          <div class="api-actions"><button class="secondary-button mobile-filter-button" type="button" data-filter-toggle>Filter</button><button id="open-journal-button" class="primary-button" type="button">＋ 新增紀錄</button></div>
         </div>
+        <nav class="workspace-tabs" aria-label="Records sections">
+          <a href="#research-dashboard">Companies</a>
+          <a class="active" href="#journal">Decisions</a>
+          <a href="#reviews">Reviews</a>
+        </nav>
         <div class="toolbar journal-toolbar">
           <label class="field search-field"><span>搜尋</span><input id="journal-search" type="search" placeholder="股票代號或標題"></label>
           <label class="field"><span>股票</span><select id="journal-stock-filter"><option>全部股票</option></select></label>
@@ -315,19 +349,24 @@
       </div>
     </section>
 
-    <section id="reviews" class="content-section alternate-section">
+    <section id="reviews" class="content-section alternate-section workspace-section">
       <div class="container">
         <div class="section-heading">
           <div>
             <p class="eyebrow">REVIEW & LESSONS</p>
             <h2>投資回顧與經驗累積</h2>
-            <p>回顧已做出的 Decision，整理可重複使用的 Mistake、Success 與 Lesson。</p>
           </div>
           <div class="api-actions">
+            <button class="secondary-button mobile-filter-button" type="button" data-filter-toggle>Filter</button>
             <button class="primary-button" type="button" data-open-review-dialog>＋ New Review</button>
             <button class="secondary-button" type="button" data-open-lesson-dialog>＋ New Lesson</button>
           </div>
         </div>
+        <nav class="workspace-tabs" aria-label="Records sections">
+          <a href="#journal">Decisions</a>
+          <a class="active" href="#reviews">Reviews</a>
+          <a href="#records">Backup</a>
+        </nav>
         <div class="toolbar journal-toolbar">
           <label class="field search-field"><span>搜尋</span><input id="review-search" type="search" placeholder="Company、Lesson、Mistake、Success 或 Tags"></label>
           <label class="field"><span>Company</span><select id="review-company-filter"><option value="">全部公司</option></select></label>
@@ -354,31 +393,35 @@
       </div>
     </section>
 
-    <section id="assets" class="content-section">
+    <section id="assets" class="content-section workspace-section">
       <div class="container">
         <div class="section-heading">
           <div>
             <p class="eyebrow">OFFLINE ASSET CORE</p>
             <h2>離線資產資料核心</h2>
-            <p>管理現金、銀行存款、券商現金、保單與負債；只做手動輸入，不串接外部 API。</p>
           </div>
         </div>
-        <article class="panel asset-summary-panel">
+        <nav class="workspace-tabs" aria-label="Asset sections">
+          <a href="#accounts">Accounts</a>
+          <a href="#insurance">Insurance</a>
+          <a href="#liabilities">Liabilities</a>
+        </nav>
+        <article class="panel asset-summary-panel" data-asset-panel="accounts">
           <div class="panel-heading"><div><p class="panel-label">ACCOUNT BALANCES</p><h2>帳戶最新餘額小計</h2></div></div>
           <p class="form-help">同幣別才會加總；不同幣別不會自動換算。封存帳戶預設不列入目前小計。</p>
           <div id="asset-currency-subtotals" class="summary-grid"></div>
         </article>
         <div class="asset-section-grid">
-          <article class="panel">
+          <article class="panel" data-asset-panel="accounts">
             <div class="panel-heading"><div><p class="panel-label">FINANCIAL ACCOUNTS</p><h2>帳戶管理</h2></div><button id="open-account-button" class="primary-button" type="button">＋ 新增帳戶</button></div>
             <p class="form-help">券商現金只輸入真的留在券商帳戶的現金，避免與股票持倉重複計算。</p>
             <div id="accounts-list" class="asset-list"></div>
           </article>
-          <article class="panel">
+          <article class="panel" data-asset-panel="insurance">
             <div class="panel-heading"><div><p class="panel-label">INSURANCE</p><h2>保單管理</h2></div><button id="open-policy-button" class="primary-button" type="button">＋ 新增保單</button></div>
             <div id="policies-list" class="asset-list"></div>
           </article>
-          <article class="panel">
+          <article class="panel" data-asset-panel="liabilities">
             <div class="panel-heading"><div><p class="panel-label">LIABILITIES</p><h2>負債管理</h2></div><button id="open-liability-button" class="primary-button" type="button">＋ 新增負債</button></div>
             <div id="liabilities-list" class="asset-list"></div>
           </article>
@@ -386,13 +429,12 @@
       </div>
     </section>
 
-    <section id="cash-flow" class="content-section alternate-section">
+    <section id="cash-flow" class="content-section alternate-section workspace-section">
       <div class="container">
         <div class="section-heading">
           <div>
             <p class="eyebrow">CASH FLOW</p>
             <h2>收支與現金流管理</h2>
-            <p>手動記錄 Income、Expense、Transfer、Recurring 與 Budget，不連接外部 API。</p>
           </div>
           <div class="api-actions">
             <button class="primary-button" type="button" data-open-cash-flow-entry="income">＋ Income</button>
@@ -435,6 +477,37 @@
           <div class="panel-heading"><div><p class="panel-label">RECURRING LIST</p><h2>週期收入與支出</h2></div></div>
           <div id="recurring-list" class="asset-list"></div>
         </article>
+      </div>
+    </section>
+
+    <section id="records" class="content-section workspace-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RECORDS</p>
+            <h2>紀錄與備份</h2>
+          </div>
+          <button class="primary-button" type="button" data-open-data-management>Backup</button>
+        </div>
+        <nav class="workspace-tabs" aria-label="Records sections">
+          <a href="#journal">Decisions</a>
+          <a href="#reviews">Reviews</a>
+          <a class="active" href="#records">Backup</a>
+        </nav>
+        <div class="asset-section-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">DECISIONS</p><h2>投資決策紀錄</h2></div><a class="small-button" href="#journal">Open</a></div>
+            <p class="empty-state">Journal、Decision、Notes 保留在 Records 的 Decisions 分頁。</p>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">REVIEWS</p><h2>Review & Lessons</h2></div><a class="small-button" href="#reviews">Open</a></div>
+            <p class="empty-state">投資回顧、Lesson、Reminder 都保留在 Reviews 分頁。</p>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">BACKUP</p><h2>資料備份</h2></div><button class="small-button" type="button" data-open-data-management>Open</button></div>
+            <p class="empty-state">Backup、Import、Integrity Check 移到這裡，不佔用 Dashboard 首屏。</p>
+          </article>
+        </div>
       </div>
     </section>
   </main>
