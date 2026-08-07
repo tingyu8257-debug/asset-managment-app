@@ -349,7 +349,7 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
     flex: 1 1 auto;
     overflow: hidden;
     color: #fff;
-    font-size: 1.05rem;
+    font-size: 1.22rem;
     font-weight: 800;
     line-height: 1.2;
     text-overflow: ellipsis;

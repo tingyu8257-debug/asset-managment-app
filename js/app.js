@@ -217,6 +217,7 @@
     document.querySelector(".mobile-home-button")?.classList.toggle("is-hidden", hash === "dashboard");
     const mobileTitle = document.querySelector(".mobile-route-title");
     if (mobileTitle) mobileTitle.textContent = getMobileRouteTitle(hash);
+    syncWorkspaceTabs(hash);
     document.querySelectorAll("[data-nav-group]").forEach((group) => group.classList.remove("nav-has-active"));
     document.querySelectorAll(".main-nav .nav-link").forEach((link) => {
       const isActive = link.getAttribute("href") === `#${hash}`;
@@ -231,6 +232,22 @@
     if (route === "cash-flow") return "Cash Flow";
     if (route === "records") return "Records";
     return "Net Worth Dashboard";
+  }
+
+  function syncWorkspaceTabs(route) {
+    document.querySelectorAll(".workspace-tabs").forEach((tabs) => {
+      const links = [...tabs.querySelectorAll("a")];
+      links.forEach((link) => {
+        const targetRoute = (link.getAttribute("href") || "").replace(/^#/, "");
+        link.classList.toggle("active", targetRoute === route);
+      });
+      const active = links.find((link) => link.classList.contains("active"));
+      if (!active || tabs.offsetParent === null) return;
+      window.requestAnimationFrame(() => {
+        const left = active.offsetLeft - Math.max(12, (tabs.clientWidth - active.offsetWidth) / 2);
+        tabs.scrollTo({ left, behavior: "auto" });
+      });
+    });
   }
 
   function renderImportSummary(summary) {
@@ -304,6 +321,13 @@
     if (target.dataset.workspaceLink !== undefined) {
       closeWorkspaceMenu();
       closeMobileFilters();
+    }
+    if (target.closest(".workspace-tabs")) {
+      const href = target.getAttribute("href");
+      if (href?.startsWith("#") && window.location.hash !== href) {
+        event.preventDefault();
+        window.location.hash = href;
+      }
     }
     if (target.dataset.navMenu) {
       const group = target.closest("[data-nav-group]");
