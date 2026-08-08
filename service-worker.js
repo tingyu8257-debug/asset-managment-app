@@ -1,4 +1,4 @@
-const CACHE_VERSION = "core-satellite-v1.2.6";
+const CACHE_VERSION = "core-satellite-v1.2.7";
 
 const APP_SHELL = [
   "./",

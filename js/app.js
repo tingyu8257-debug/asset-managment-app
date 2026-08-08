@@ -174,11 +174,6 @@
     if (isOpen) closeMobileNavigation();
   }
 
-  function closeQuickActions() {
-    document.body.classList.remove("quick-actions-open");
-    document.querySelector("[data-quick-actions-toggle]")?.setAttribute("aria-expanded", "false");
-  }
-
   function closeWorkspaceMenu() {
     document.body.classList.remove("workspace-menu-open");
     document.querySelector("[data-workspace-menu-toggle]")?.setAttribute("aria-expanded", "false");
@@ -205,11 +200,6 @@
     if (isOpen) closeWorkspaceMenu();
     document.body.classList.toggle("mobile-filters-open", isOpen);
     document.querySelector(".sheet-backdrop").hidden = !isOpen;
-  }
-
-  function toggleQuickActions() {
-    const isOpen = document.body.classList.toggle("quick-actions-open");
-    document.querySelector("[data-quick-actions-toggle]")?.setAttribute("aria-expanded", String(isOpen));
   }
 
   function bindWorkspaceSheetDrag() {
@@ -374,10 +364,6 @@
       return;
     }
     if (target.closest(".header-quick-action-menu")) closeHeaderQuickActions();
-    if (target.dataset.quickActionsToggle !== undefined) {
-      toggleQuickActions();
-      return;
-    }
     if (target.dataset.workspaceMenuToggle !== undefined) {
       toggleWorkspaceMenu();
       return;
@@ -445,7 +431,6 @@
     if (target.dataset.quickAction === "journal") stocksModule.openJournalDialog();
     if (target.dataset.quickAction === "review") reviewView.openReviewDialog();
     if (target.dataset.quickAction) {
-      closeQuickActions();
       closeHeaderQuickActions();
     }
     if (target.dataset.openCashFlowEntry) {

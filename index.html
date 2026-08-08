@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/style.css?v=1.2.6">
+  <link rel="stylesheet" href="css/style.css?v=1.2.7">
   <script src="js/data.js" defer></script>
   <script src="js/app-constants.js" defer></script>
   <script src="js/asset-calculation-core.js" defer></script>
@@ -48,7 +48,7 @@
   <script src="js/personal-finance-form-controller.js" defer></script>
   <script src="js/cash-flow-form-controller.js" defer></script>
   <script src="js/pwa-registration.js" defer></script>
-  <script src="js/app.js?v=1.2.6" defer></script>
+  <script src="js/app.js?v=1.2.7" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -90,24 +90,23 @@
           <div id="global-search-results" class="global-search-results" hidden></div>
         </label>
         <div class="nav-menu-section">
-          <p class="nav-menu-label">Home</p>
-          <a class="nav-link" href="#dashboard">Dashboard</a>
+          <a class="nav-link" href="#dashboard"><span class="nav-icon" aria-hidden="true">⌂</span><span>Home</span></a>
         </div>
         <div class="nav-menu-section">
           <p class="nav-menu-label">Portfolio</p>
-          <a class="nav-link" href="#research-dashboard">Research Dashboard</a>
+          <a class="nav-link" href="#research-dashboard"><span class="nav-icon" aria-hidden="true">⌕</span><span>Research Dashboard</span></a>
         </div>
         <div class="nav-menu-section">
           <p class="nav-menu-label">Assets</p>
-          <a class="nav-link" href="#assets">Asset Dashboard</a>
+          <a class="nav-link" href="#assets"><span class="nav-icon" aria-hidden="true">▤</span><span>Asset Dashboard</span></a>
         </div>
         <div class="nav-menu-section">
           <p class="nav-menu-label">Cash Flow</p>
-          <a class="nav-link" href="#cash-flow">Cash Flow Dashboard</a>
+          <a class="nav-link" href="#cash-flow"><span class="nav-icon" aria-hidden="true">↕</span><span>Cash Flow Dashboard</span></a>
         </div>
         <div class="nav-menu-section">
           <p class="nav-menu-label">Settings</p>
-          <a class="nav-link" href="#settings">Settings Dashboard</a>
+          <a class="nav-link" href="#settings"><span class="nav-icon" aria-hidden="true">⚙</span><span>Settings Dashboard</span></a>
         </div>
       </nav>
       <button class="primary-button open-stock-dialog-button" type="button">＋ 新增研究標的</button>
@@ -142,21 +141,6 @@
           <div>
             <p class="eyebrow">NET WORTH DASHBOARD</p>
             <h1>Net Worth Dashboard</h1>
-          </div>
-          <button class="quick-actions-toggle" type="button" aria-expanded="false" aria-controls="dashboard-quick-actions" data-quick-actions-toggle>
-            <span>Quick Actions</span>
-            <strong>＋</strong>
-          </button>
-          <div id="dashboard-quick-actions" class="quick-actions">
-            <button class="primary-button" type="button" data-quick-action="buy">＋ Buy Transaction</button>
-            <button class="secondary-button" type="button" data-quick-action="sell">＋ Sell Transaction</button>
-            <button class="secondary-button" type="button" data-quick-action="buy">＋ Add Position</button>
-            <button class="secondary-button" type="button" data-quick-action="income">＋ Add Income</button>
-            <button class="secondary-button" type="button" data-quick-action="account">＋ Add Financial Account</button>
-            <button class="secondary-button" type="button" data-quick-action="insurance">＋ Add Insurance</button>
-            <button class="secondary-button" type="button" data-quick-action="liability">＋ Add Liability</button>
-            <button class="secondary-button" type="button" data-quick-action="expense">＋ Add Expense</button>
-            <button class="secondary-button" type="button" data-quick-action="journal">＋ Add Journal</button>
           </div>
         </div>
 
