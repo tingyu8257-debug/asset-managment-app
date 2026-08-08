@@ -80,6 +80,10 @@
           <div><dt>Next Review</dt><dd>${escapeHtml(unknown(stock.nextReviewDate))}</dd></div>
           <div><dt>Observation</dt><dd>${escapeHtml(unknown(stock.stage))}</dd></div>
           <div><dt>Confidence</dt><dd>${escapeHtml(status.confidence ? `${status.confidence}/10` : UNKNOWN_TEXT)}</dd></div>
+          <div><dt>Fair Price</dt><dd>${escapeHtml(unknown(stock.fairPriceRange))}</dd></div>
+          <div><dt>Thesis</dt><dd>${escapeHtml(thesisStatusLabels[stock.thesisStatus] || UNKNOWN_TEXT)}</dd></div>
+          <div class="mobile-summary-wide"><dt>Risk</dt><dd>${escapeHtml(unknown(stock.mainRisks || stock.risk))}</dd></div>
+          <div class="mobile-summary-wide"><dt>Latest Decision</dt><dd>${escapeHtml(latestDecisionText)}</dd></div>
         </dl>
         <div class="tag-row">${stock.tags?.length ? stock.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("") : `<span>尚未設定</span>`}</div>
         <dl class="price-range"><div><dt>Fair Price Range</dt><dd>${escapeHtml(unknown(stock.fairPriceRange))}</dd></div><div><dt>Next Review</dt><dd>${escapeHtml(unknown(stock.nextReviewDate))}</dd></div></dl>
