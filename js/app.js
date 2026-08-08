@@ -300,14 +300,30 @@
       closeMobileFilters();
       return;
     }
-    const researchCard = event.target.closest("[data-research-card]");
-    const clickedCardControl = event.target.closest("button, a, input, select, textarea, label, summary");
-    if (researchCard && !clickedCardControl && window.matchMedia("(max-width: 640px)").matches) {
-      document.querySelectorAll("[data-research-card].card-actions-open").forEach((card) => {
-        if (card !== researchCard) card.classList.remove("card-actions-open");
+    const cardMenuToggle = event.target.closest("[data-card-action-menu-toggle]");
+    const openCardMenus = document.querySelectorAll("[data-research-card].card-actions-open");
+    if (cardMenuToggle && window.matchMedia("(max-width: 640px)").matches) {
+      const card = cardMenuToggle.closest("[data-research-card]");
+      const willOpen = !card?.classList.contains("card-actions-open");
+      openCardMenus.forEach((openCard) => {
+        if (openCard !== card) {
+          openCard.classList.remove("card-actions-open");
+          openCard.querySelector("[data-card-action-menu-toggle]")?.setAttribute("aria-expanded", "false");
+        }
       });
-      researchCard.classList.toggle("card-actions-open");
+      card?.classList.toggle("card-actions-open", willOpen);
+      cardMenuToggle.setAttribute("aria-expanded", String(willOpen));
       return;
+    }
+    if (!event.target.closest("[data-research-card].card-actions-open")) {
+      openCardMenus.forEach((card) => {
+        card.classList.remove("card-actions-open");
+        card.querySelector("[data-card-action-menu-toggle]")?.setAttribute("aria-expanded", "false");
+      });
+    } else if (event.target.closest("[data-card-action-menu] button")) {
+      const card = event.target.closest("[data-research-card]");
+      card?.classList.remove("card-actions-open");
+      card?.querySelector("[data-card-action-menu-toggle]")?.setAttribute("aria-expanded", "false");
     }
     const target = event.target.closest("button, a");
     if (!target) return;

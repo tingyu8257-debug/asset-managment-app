@@ -204,14 +204,14 @@ progress { width: 100%; height: 8px; accent-color: var(--teal); }
 .watchlist-table .long-cell { min-width: 220px; max-width: 320px; white-space: normal; overflow-wrap: anywhere; }
 .watchlist-table .table-tags { min-width: 160px; margin: 0; }
 .watchlist-table .watchlist-actions { min-width: 210px; }
-.research-card { display: flex; flex: 0 0 340px; flex-direction: column; min-width: 340px; max-width: 340px; padding: 20px; border-radius: 22px; box-shadow: 14px 18px 26px rgba(5, 24, 36, 0.24), -7px -7px 18px rgba(255, 255, 255, 0.72); scroll-snap-align: start; }
+.research-card { position: relative; display: flex; flex: 0 0 340px; flex-direction: column; min-width: 340px; max-width: 340px; padding: 20px; border-radius: 22px; box-shadow: 14px 18px 26px rgba(5, 24, 36, 0.24), -7px -7px 18px rgba(255, 255, 255, 0.72); scroll-snap-align: start; }
 .research-card:hover { transform: translateY(-2px); box-shadow: 18px 22px 32px rgba(5, 24, 36, 0.28), -8px -8px 20px rgba(255, 255, 255, 0.76); }
 .edit-stock-button { padding: 5px 9px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-soft); color: var(--teal-dark); font-size: 0.7rem; font-weight: 700; }
 .card-status-actions { display: flex; flex-shrink: 0; align-items: flex-end; flex-direction: column; gap: 7px; }
 .card-top { align-items: start; }
 .card-top h3 { margin: 2px 0 0; font-size: 1rem; overflow-wrap: anywhere; }
 .card-top p { margin-bottom: 0; color: var(--muted); font-size: 0.75rem; }
-.mobile-card-summary, .mobile-card-delete { display: none; }
+.mobile-card-summary, .mobile-card-menu-button, .mobile-card-action-menu { display: none; }
 .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin: 15px 0; }
 .tag-row span { padding: 3px 7px; border-radius: 5px; background: #edf5f3; color: var(--teal-dark); font-size: 0.68rem; font-weight: 700; }
 .price-range { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 0 0 16px; overflow: hidden; border: 1px solid var(--border); border-radius: 7px; background: var(--border); }
@@ -641,13 +641,57 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   .research-card .card-top p { font-size: 0.7rem; }
   .research-card .tag-row, .research-card .price-range, .research-card .research-notes, .research-card .history-details { display: none; }
   .research-card .card-status-actions .badge { display: none; }
-  .mobile-card-delete {
-    display: inline-flex;
-    min-height: 34px;
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-size: 0.72rem;
+  .mobile-card-menu-button {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--teal-dark);
+    box-shadow: 0 6px 14px rgba(5, 24, 36, 0.1);
+    font-size: 1.12rem;
+    font-weight: 850;
+    line-height: 1;
   }
+  .research-card.card-actions-open .mobile-card-menu-button {
+    border-color: var(--teal);
+    background: #edf5f3;
+  }
+  .mobile-card-action-menu {
+    position: absolute;
+    top: 54px;
+    right: 12px;
+    z-index: 3;
+    display: none;
+    width: min(210px, calc(100% - 24px));
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: 0 18px 38px rgba(5, 24, 36, 0.22);
+  }
+  .research-card.card-actions-open .mobile-card-action-menu { display: grid; gap: 4px; }
+  .mobile-card-action-menu button, .mobile-menu-status {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-align: left;
+  }
+  .mobile-card-action-menu button:hover { background: var(--surface-soft); }
+  .mobile-menu-status { color: var(--good); }
+  .mobile-card-action-menu .danger-menu-item { color: var(--danger); }
   .mobile-card-summary {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -672,13 +716,7 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
     font-weight: 850;
     overflow-wrap: anywhere;
   }
-  .research-card .card-footer {
-    display: none;
-    gap: 8px;
-    margin-top: 12px;
-    padding-top: 12px;
-  }
-  .research-card.card-actions-open .card-footer { display: flex; }
+  .research-card .card-footer { display: none; }
   .research-card .card-actions { display: flex; flex-wrap: wrap; gap: 8px; }
   .research-card .card-actions .secondary-button, .research-card .card-actions .badge {
     min-height: 36px;
