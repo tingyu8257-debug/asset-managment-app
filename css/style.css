@@ -139,9 +139,9 @@ body.mobile-nav-open .main-nav { display: grid; }
 }
 .nav-icon {
   display: grid;
-  flex: 0 0 34px;
-  width: 34px;
-  height: 34px;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
   place-items: center;
   border: 1px solid rgba(149, 226, 217, 0.32);
   border-radius: 10px;
@@ -151,8 +151,8 @@ body.mobile-nav-open .main-nav { display: grid; }
 }
 .nav-icon svg {
   display: block;
-  width: 25px;
-  height: 25px;
+  width: 32px;
+  height: 32px;
 }
 .nav-icon .icon-fill { fill: currentColor; }
 .nav-icon .icon-soft { fill: rgba(159, 232, 222, 0.22); }
@@ -165,6 +165,13 @@ body.mobile-nav-open .main-nav { display: grid; }
 }
 .nav-icon .icon-stroke-strong { stroke-width: 4.2; }
 .nav-icon .icon-stroke-heavy { stroke-width: 4.4; }
+.nav-icon .icon-money-text {
+  fill: var(--navy-light);
+  font-size: 14px;
+  font-weight: 900;
+  dominant-baseline: middle;
+  font-family: Arial, sans-serif;
+}
 .nav-icon .icon-cut {
   fill: none;
   stroke: var(--navy-light);
