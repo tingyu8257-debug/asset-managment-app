@@ -215,8 +215,13 @@
     const hash = portfolioRouter.syncHash();
     document.body.dataset.route = hash;
     document.querySelector(".mobile-home-button")?.classList.toggle("is-hidden", hash === "dashboard");
+    const routeMeta = getRouteHeaderMeta(hash);
+    const routeKicker = document.querySelector(".route-kicker");
     const mobileTitle = document.querySelector(".mobile-route-title");
-    if (mobileTitle) mobileTitle.textContent = getMobileRouteTitle(hash);
+    const routeDescription = document.querySelector(".route-description");
+    if (routeKicker) routeKicker.textContent = routeMeta.kicker;
+    if (mobileTitle) mobileTitle.textContent = routeMeta.title;
+    if (routeDescription) routeDescription.textContent = routeMeta.description;
     syncWorkspaceTabs(hash);
     document.querySelectorAll("[data-nav-group]").forEach((group) => group.classList.remove("nav-has-active"));
     document.querySelectorAll(".main-nav .nav-link").forEach((link) => {
@@ -227,17 +232,26 @@
   }
 
   function getMobileRouteTitle(route) {
-    if (route === "research-dashboard") return "Companies";
-    if (route === "watchlist") return "Watchlist";
-    if (route === "positions") return "Positions";
-    if (route === "journal") return "Decisions";
-    if (route === "reviews") return "Reviews";
-    if (route === "assets" || route === "accounts") return "Accounts";
-    if (route === "insurance") return "Insurance";
-    if (route === "liabilities") return "Liabilities";
-    if (route === "cash-flow") return "Cash Flow";
-    if (route === "records") return "Records";
-    return "Net Worth Dashboard";
+    return getRouteHeaderMeta(route).title;
+  }
+
+  function getRouteHeaderMeta(route) {
+    const routes = {
+      dashboard: ["NET WORTH", "Net Worth Dashboard", "Portfolio overview, cash movement, and alerts"],
+      "research-dashboard": ["INVESTMENT", "Companies", "Research quality, thesis status, and review priority"],
+      watchlist: ["INVESTMENT", "Watchlist", "候選標的、觀察階段、下一次檢查與決策入口"],
+      positions: ["INVESTMENT", "Positions", "持倉、成本、損益與交易紀錄"],
+      journal: ["INVESTMENT", "Decisions", "買賣理由、執行狀態與決策脈絡"],
+      reviews: ["INVESTMENT", "Reviews", "投資回顧、錯誤模式與可重用 Lessons"],
+      assets: ["ASSET CORE", "Accounts", "帳戶、保單、負債與離線資產核心"],
+      accounts: ["ASSET CORE", "Accounts", "帳戶、保單、負債與離線資產核心"],
+      insurance: ["ASSET CORE", "Insurance", "保單價值、繳費狀態與保障資料"],
+      liabilities: ["ASSET CORE", "Liabilities", "負債餘額、利率與還款提醒"],
+      "cash-flow": ["CASH FLOW", "Cash Flow", "收入、支出、預算與週期項目"],
+      records: ["RECORDS", "Records", "決策紀錄、回顧與備份入口"]
+    };
+    const [kicker, title, description] = routes[route] || routes.dashboard;
+    return { kicker, title, description };
   }
 
   function syncWorkspaceTabs(route) {

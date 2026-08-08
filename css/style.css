@@ -33,6 +33,45 @@ body.is-standalone .site-header { background: #0c2438; }
 .brand-mark { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 9px; background: var(--teal); font-weight: 800; }
 .brand strong, .brand small { display: block; }
 .brand small { margin-top: 3px; color: #b8c8d1; font-size: 0.72rem; }
+.route-heading {
+  display: grid;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 2px;
+  padding: 8px 0;
+}
+.route-kicker {
+  width: fit-content;
+  padding: 2px 7px;
+  border: 1px solid rgba(120, 200, 191, 0.3);
+  border-radius: 999px;
+  color: #8fc7c1;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+.mobile-route-title {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: #fff;
+  font-size: clamp(1.15rem, 2.4vw, 1.75rem);
+  font-weight: 850;
+  line-height: 1.08;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.route-description {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: #b8c8d1;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .mobile-nav-toggle { display: grid; flex: 0 0 auto; width: 44px; height: 44px; place-items: center; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 9px; background: rgba(255, 255, 255, 0.08); color: #fff; font-size: 1.45rem; font-weight: 800; line-height: 1; }
 .main-nav {
   position: absolute;
@@ -211,6 +250,7 @@ progress { width: 100%; height: 8px; accent-color: var(--teal); }
 .alternate-section { background: var(--cream); }
 .section-heading { align-items: end; margin-bottom: 24px; }
 .section-heading > div:first-child { display: none; }
+.section-heading:not(:has(.api-actions)):not(:has(> button)) { display: none; }
 .section-heading h2 { margin-bottom: 3px; font-size: 2rem; }
 .toolbar { display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 12px; margin-bottom: 18px; padding: 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
 .research-toolbar { grid-template-columns: minmax(220px, 1.5fr) repeat(4, minmax(130px, 1fr)); align-items: end; }
@@ -363,19 +403,6 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
 .mobile-home-button circle { stroke: #78c8bf; }
 .mobile-home-button path { stroke: #fff; }
 .mobile-home-button.is-hidden { display: none; }
-.mobile-route-title {
-  display: block;
-  min-width: 0;
-  flex: 1 1 auto;
-  overflow: hidden;
-  color: #fff;
-  font-size: 1.35rem;
-  font-weight: 800;
-  line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 @media (max-width: 960px) {
   .topbar { gap: 14px; padding: 12px 0; }
   .stat-grid, .dashboard-row-three { grid-template-columns: repeat(2, 1fr); }
@@ -469,6 +496,16 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   #assets .section-heading h2::after { content: "Accounts"; }
   body[data-route="insurance"] #assets .section-heading h2::after { content: "Insurance"; }
   body[data-route="liabilities"] #assets .section-heading h2::after { content: "Liabilities"; }
+  .hero-heading > div:first-child, .section-heading > div:first-child {
+    display: none !important;
+  }
+  .hero-heading > div:first-child::after, .section-heading > div:first-child::after, .section-heading h2::after {
+    display: none !important;
+    content: none !important;
+  }
+  .section-heading:not(:has(.api-actions)):not(:has(> button)) {
+    display: none;
+  }
   .quick-actions-toggle {
     display: flex;
     align-items: center;
