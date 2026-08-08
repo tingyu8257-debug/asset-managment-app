@@ -167,11 +167,12 @@ body.mobile-nav-open .main-nav { display: grid; }
 .nav-icon .icon-stroke-heavy { stroke-width: 4.4; }
 .nav-icon .icon-money-text {
   fill: var(--navy-light);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 900;
-  dominant-baseline: middle;
+  dominant-baseline: central;
   font-family: Arial, sans-serif;
 }
+.nav-icon .icon-money-text-light { fill: var(--navy-light); font-size: 20px; }
 .nav-icon .icon-cut {
   fill: none;
   stroke: var(--navy-light);
