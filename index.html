@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/style.css?v=1.2.7">
+  <link rel="stylesheet" href="css/style.css?v=1.2.9">
   <script src="js/data.js" defer></script>
   <script src="js/app-constants.js" defer></script>
   <script src="js/asset-calculation-core.js" defer></script>
@@ -48,7 +48,7 @@
   <script src="js/personal-finance-form-controller.js" defer></script>
   <script src="js/cash-flow-form-controller.js" defer></script>
   <script src="js/pwa-registration.js" defer></script>
-  <script src="js/app.js?v=1.2.7" defer></script>
+  <script src="js/app.js?v=1.2.9" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -67,7 +67,6 @@
       </div>
       <button class="header-action-toggle" type="button" aria-expanded="false" aria-controls="header-quick-action-menu" data-header-quick-actions-toggle>＋</button>
       <div id="header-quick-action-menu" class="header-quick-action-menu" hidden>
-        <p class="nav-menu-label">Quick Actions</p>
         <button class="nav-menu-button open-stock-dialog-button" type="button">Add Research Target</button>
         <button class="nav-menu-button" type="button" data-quick-action="buy">Buy Transaction</button>
         <button class="nav-menu-button" type="button" data-quick-action="sell">Sell Transaction</button>
@@ -93,20 +92,16 @@
           <a class="nav-link" href="#dashboard"><span class="nav-icon" aria-hidden="true">⌂</span><span>Home</span></a>
         </div>
         <div class="nav-menu-section">
-          <p class="nav-menu-label">Portfolio</p>
-          <a class="nav-link" href="#research-dashboard"><span class="nav-icon" aria-hidden="true">⌕</span><span>Research Dashboard</span></a>
+          <a class="nav-link" href="#research-dashboard"><span class="nav-icon" aria-hidden="true">⌕</span><span>Portfolio</span></a>
         </div>
         <div class="nav-menu-section">
-          <p class="nav-menu-label">Assets</p>
-          <a class="nav-link" href="#assets"><span class="nav-icon" aria-hidden="true">▤</span><span>Asset Dashboard</span></a>
+          <a class="nav-link" href="#assets"><span class="nav-icon" aria-hidden="true">▤</span><span>Assets</span></a>
         </div>
         <div class="nav-menu-section">
-          <p class="nav-menu-label">Cash Flow</p>
-          <a class="nav-link" href="#cash-flow"><span class="nav-icon" aria-hidden="true">↕</span><span>Cash Flow Dashboard</span></a>
+          <a class="nav-link" href="#cash-flow"><span class="nav-icon" aria-hidden="true">↕</span><span>Cash Flow</span></a>
         </div>
         <div class="nav-menu-section">
-          <p class="nav-menu-label">Settings</p>
-          <a class="nav-link" href="#settings"><span class="nav-icon" aria-hidden="true">⚙</span><span>Settings Dashboard</span></a>
+          <a class="nav-link" href="#settings"><span class="nav-icon" aria-hidden="true">⚙</span><span>Settings</span></a>
         </div>
       </nav>
       <button class="primary-button open-stock-dialog-button" type="button">＋ 新增研究標的</button>
@@ -439,7 +434,7 @@
             <p class="eyebrow">CASH FLOW</p>
             <h2>收支與現金流管理</h2>
           </div>
-          <div class="api-actions">
+          <div class="api-actions cash-flow-action-rail">
             <button class="primary-button" type="button" data-open-cash-flow-entry="income">＋ Income</button>
             <button class="primary-button" type="button" data-open-cash-flow-entry="expense">＋ Expense</button>
             <button class="secondary-button" type="button" data-open-cash-flow-entry="transfer">＋ Transfer</button>

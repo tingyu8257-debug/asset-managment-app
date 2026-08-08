@@ -117,7 +117,7 @@ body.mobile-nav-open .main-nav { display: grid; }
 .nav-link, .nav-trigger, .nav-menu-button { display: block; border: 0; background: transparent; color: inherit; font: inherit; text-align: left; }
 .nav-trigger { display: flex; align-items: center; gap: 5px; width: 100%; padding: 2px 10px 6px; opacity: 0.8; border: 0; background: transparent; color: #8fc7c1; font-size: 0.64rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; pointer-events: none; }
 .nav-trigger span { display: none; }
-.nav-group, .nav-menu-section { position: relative; min-width: 0; padding: 8px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); }
+.nav-group, .nav-menu-section { position: relative; min-width: 0; padding: 6px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); }
 .nav-menu {
   position: static;
   z-index: 20;
@@ -227,6 +227,27 @@ body.mobile-nav-open .main-nav { display: grid; }
 .performance-grid { margin-top: 20px; }
 .market-data-grid { margin-bottom: 20px; }
 .api-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.cash-flow-action-rail {
+  flex-wrap: nowrap;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 2px 10px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+.cash-flow-action-rail::-webkit-scrollbar { display: none; }
+.cash-flow-action-rail .primary-button,
+.cash-flow-action-rail .secondary-button {
+  flex: 0 0 138px;
+  width: 138px;
+  min-height: 44px;
+  justify-content: center;
+  padding: 9px 10px;
+  text-align: center;
+  white-space: nowrap;
+  scroll-snap-align: start;
+}
 .api-status { min-height: 1.4em; color: var(--muted); font-size: 0.75rem; }
 .api-status.success { color: var(--good); }
 .api-status.error { color: var(--danger); }
@@ -491,6 +512,13 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   #assets .section-heading > div:first-child::after { content: "帳戶、保單、負債與離線資產核心"; }
   #cash-flow .section-heading > div:first-child::after { content: "收入、支出、預算與週期項目"; }
   #records .section-heading > div:first-child::after { content: "決策紀錄、回顧與備份入口"; }
+  #watchlist .section-heading > div:first-child::after { content: "Candidates, review timing, and decision entry points"; }
+  #positions .section-heading > div:first-child::after { content: "Holdings, cost basis, P&L, and transaction history"; }
+  #journal .section-heading > div:first-child::after { content: "Investment rationale, execution status, and context"; }
+  #reviews .section-heading > div:first-child::after { content: "Post-decision reviews, mistakes, and reusable lessons"; }
+  #assets .section-heading > div:first-child::after { content: "Accounts, policies, liabilities, and offline asset records"; }
+  #cash-flow .section-heading > div:first-child::after { content: "Income, expenses, budgets, and recurring items"; }
+  #records .section-heading > div:first-child::after { content: "Decision logs, reviews, and backup entry points"; }
   .hero-heading .eyebrow, .section-heading .eyebrow {
     width: fit-content;
     margin: 0;
@@ -588,6 +616,17 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   }
   .section-heading .api-actions .secondary-button { background: var(--surface); }
   .section-heading .api-actions .primary-button { box-shadow: 0 8px 18px rgba(12, 123, 115, 0.16); }
+  #cash-flow .section-heading .cash-flow-action-rail {
+    flex-wrap: nowrap;
+    margin-top: 0;
+    padding: 0 2px 10px;
+    border-top: 0;
+  }
+  #cash-flow .section-heading .cash-flow-action-rail .primary-button,
+  #cash-flow .section-heading .cash-flow-action-rail .secondary-button {
+    flex: 0 0 138px;
+    width: 138px;
+  }
   .mobile-filter-button { display: none; }
   .panel-heading {
     gap: 6px;
@@ -668,6 +707,10 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   .workspace-mode-bar .record-actions, .card-actions, .row-actions { justify-content: flex-start; }
   .small-button, .secondary-button, .primary-button { min-height: 44px; }
   .section-heading .primary-button { width: 100%; }
+  #cash-flow .section-heading .cash-flow-action-rail .primary-button,
+  #cash-flow .section-heading .cash-flow-action-rail .secondary-button {
+    width: 138px;
+  }
   .review-list li { grid-template-columns: 48px 1fr; }
   .review-list .badge { grid-column: 2; justify-self: start; }
   .journal-entry { grid-template-columns: 1fr; gap: 14px; }
