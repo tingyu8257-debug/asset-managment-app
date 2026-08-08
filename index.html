@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=1.2.3">
   <script src="js/data.js" defer></script>
   <script src="js/app-constants.js" defer></script>
   <script src="js/asset-calculation-core.js" defer></script>
@@ -48,7 +48,7 @@
   <script src="js/personal-finance-form-controller.js" defer></script>
   <script src="js/cash-flow-form-controller.js" defer></script>
   <script src="js/pwa-registration.js" defer></script>
-  <script src="js/app.js" defer></script>
+  <script src="js/app.js?v=1.2.3" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -70,7 +70,15 @@
       </a>
       <button class="mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" data-mobile-nav-toggle>≡</button>
       <nav id="main-navigation" class="main-nav" aria-label="主要導覽">
-        <a class="nav-link" href="#dashboard">Dashboard</a>
+        <label class="global-search">
+          <span class="sr-only">全站搜尋</span>
+          <input id="global-search-input" type="search" placeholder="搜尋資料">
+          <div id="global-search-results" class="global-search-results" hidden></div>
+        </label>
+        <div class="nav-menu-section">
+          <p class="nav-menu-label">Home</p>
+          <a class="nav-link" href="#dashboard">Dashboard</a>
+        </div>
         <div class="nav-group" data-nav-group>
           <button class="nav-trigger" type="button" aria-expanded="false" aria-haspopup="true" data-nav-menu="portfolio-menu">Portfolio <span aria-hidden="true">▼</span></button>
           <div id="portfolio-menu" class="nav-menu" data-nav-panel>
@@ -90,6 +98,25 @@
           </div>
         </div>
         <div class="nav-group" data-nav-group>
+          <button class="nav-trigger" type="button" aria-expanded="false" aria-haspopup="true" data-nav-menu="actions-menu">Actions <span aria-hidden="true">▼</span></button>
+          <div id="actions-menu" class="nav-menu" data-nav-panel>
+            <p class="nav-menu-label">Quick Actions</p>
+            <button class="nav-menu-button open-stock-dialog-button" type="button">Add Research Target</button>
+            <button class="nav-menu-button" type="button" data-quick-action="buy">Buy Transaction</button>
+            <button class="nav-menu-button" type="button" data-quick-action="sell">Sell Transaction</button>
+            <button class="nav-menu-button" type="button" data-quick-action="income">Add Income</button>
+            <button class="nav-menu-button" type="button" data-quick-action="expense">Add Expense</button>
+            <button class="nav-menu-button" type="button" data-open-cash-flow-entry="transfer">Add Transfer</button>
+            <button class="nav-menu-button" type="button" data-quick-action="account">Add Financial Account</button>
+            <button class="nav-menu-button" type="button" data-quick-action="insurance">Add Insurance</button>
+            <button class="nav-menu-button" type="button" data-quick-action="liability">Add Liability</button>
+            <button class="nav-menu-button" type="button" data-quick-action="journal">Add Journal</button>
+            <button class="nav-menu-button" type="button" data-quick-action="review">Add Review</button>
+            <button class="nav-menu-button" type="button" data-open-recurring>Recurring</button>
+            <button class="nav-menu-button" type="button" data-open-budget>Budget</button>
+          </div>
+        </div>
+        <div class="nav-group" data-nav-group>
           <button class="nav-trigger" type="button" aria-expanded="false" aria-haspopup="true" data-nav-menu="settings-menu">Settings <span aria-hidden="true">▼</span></button>
           <div id="settings-menu" class="nav-menu" data-nav-panel>
             <button class="nav-menu-button" type="button" data-open-data-management>Backup & Restore</button>
@@ -99,11 +126,6 @@
           </div>
         </div>
       </nav>
-      <label class="global-search">
-        <span class="sr-only">全站搜尋</span>
-        <input id="global-search-input" type="search" placeholder="搜尋資料">
-        <div id="global-search-results" class="global-search-results" hidden></div>
-      </label>
       <button class="primary-button open-stock-dialog-button" type="button">＋ 新增研究標的</button>
     </div>
   </header>
