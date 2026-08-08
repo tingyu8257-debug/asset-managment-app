@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/style.css?v=1.2.4">
+  <link rel="stylesheet" href="css/style.css?v=1.2.6">
   <script src="js/data.js" defer></script>
   <script src="js/app-constants.js" defer></script>
   <script src="js/asset-calculation-core.js" defer></script>
@@ -48,7 +48,7 @@
   <script src="js/personal-finance-form-controller.js" defer></script>
   <script src="js/cash-flow-form-controller.js" defer></script>
   <script src="js/pwa-registration.js" defer></script>
-  <script src="js/app.js?v=1.2.4" defer></script>
+  <script src="js/app.js?v=1.2.6" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -65,13 +65,23 @@
         <strong class="mobile-route-title">Net Worth Dashboard</strong>
         <small class="route-description">Portfolio overview, cash movement, and alerts</small>
       </div>
-      <a class="mobile-home-button" href="#dashboard" aria-label="回 Dashboard">
-        <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">
-          <circle cx="24" cy="24" r="21"></circle>
-          <path d="M13.5 24.2 24 15.5l10.5 8.7v12.3h-7.1v-9.2h-6.8v9.2h-7.1V24.2Z"></path>
-          <path d="M30.5 18.2v-4.1h4v7.4"></path>
-        </svg>
-      </a>
+      <button class="header-action-toggle" type="button" aria-expanded="false" aria-controls="header-quick-action-menu" data-header-quick-actions-toggle>＋</button>
+      <div id="header-quick-action-menu" class="header-quick-action-menu" hidden>
+        <p class="nav-menu-label">Quick Actions</p>
+        <button class="nav-menu-button open-stock-dialog-button" type="button">Add Research Target</button>
+        <button class="nav-menu-button" type="button" data-quick-action="buy">Buy Transaction</button>
+        <button class="nav-menu-button" type="button" data-quick-action="sell">Sell Transaction</button>
+        <button class="nav-menu-button" type="button" data-quick-action="income">Add Income</button>
+        <button class="nav-menu-button" type="button" data-quick-action="expense">Add Expense</button>
+        <button class="nav-menu-button" type="button" data-open-cash-flow-entry="transfer">Add Transfer</button>
+        <button class="nav-menu-button" type="button" data-quick-action="account">Add Financial Account</button>
+        <button class="nav-menu-button" type="button" data-quick-action="insurance">Add Insurance</button>
+        <button class="nav-menu-button" type="button" data-quick-action="liability">Add Liability</button>
+        <button class="nav-menu-button" type="button" data-quick-action="journal">Add Journal</button>
+        <button class="nav-menu-button" type="button" data-quick-action="review">Add Review</button>
+        <button class="nav-menu-button" type="button" data-open-recurring>Recurring</button>
+        <button class="nav-menu-button" type="button" data-open-budget>Budget</button>
+      </div>
       <button class="mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" data-mobile-nav-toggle>≡</button>
       <nav id="main-navigation" class="main-nav" aria-label="主要導覽">
         <label class="global-search">
@@ -83,51 +93,21 @@
           <p class="nav-menu-label">Home</p>
           <a class="nav-link" href="#dashboard">Dashboard</a>
         </div>
-        <div class="nav-group" data-nav-group>
-          <button class="nav-trigger" type="button" aria-expanded="false" aria-haspopup="true" data-nav-menu="portfolio-menu">Portfolio <span aria-hidden="true">▼</span></button>
-          <div id="portfolio-menu" class="nav-menu" data-nav-panel>
-            <p class="nav-menu-label">Stocks</p>
-            <a class="nav-link" href="#research-dashboard">Research Dashboard</a>
-            <a class="nav-link" href="#watchlist">Watchlist</a>
-            <a class="nav-link" href="#positions">Positions</a>
-            <a class="nav-link" href="#journal">Research Journal</a>
-            <a class="nav-link" href="#reviews">Reviews & Lessons</a>
-          </div>
+        <div class="nav-menu-section">
+          <p class="nav-menu-label">Portfolio</p>
+          <a class="nav-link" href="#research-dashboard">Research Dashboard</a>
         </div>
-        <div class="nav-group" data-nav-group>
-          <button class="nav-trigger" type="button" aria-expanded="false" aria-haspopup="true" data-nav-menu="finance-menu">Finance <span aria-hidden="true">▼</span></button>
-          <div id="finance-menu" class="nav-menu" data-nav-panel>
-            <a class="nav-link" href="#assets">Assets</a>
-            <a class="nav-link" href="#cash-flow">Cash Flow</a>
-          </div>
+        <div class="nav-menu-section">
+          <p class="nav-menu-label">Assets</p>
+          <a class="nav-link" href="#assets">Asset Dashboard</a>
         </div>
-        <div class="nav-group" data-nav-group>
-          <button class="nav-trigger" type="button" aria-expanded="false" aria-haspopup="true" data-nav-menu="actions-menu">Actions <span aria-hidden="true">▼</span></button>
-          <div id="actions-menu" class="nav-menu" data-nav-panel>
-            <p class="nav-menu-label">Quick Actions</p>
-            <button class="nav-menu-button open-stock-dialog-button" type="button">Add Research Target</button>
-            <button class="nav-menu-button" type="button" data-quick-action="buy">Buy Transaction</button>
-            <button class="nav-menu-button" type="button" data-quick-action="sell">Sell Transaction</button>
-            <button class="nav-menu-button" type="button" data-quick-action="income">Add Income</button>
-            <button class="nav-menu-button" type="button" data-quick-action="expense">Add Expense</button>
-            <button class="nav-menu-button" type="button" data-open-cash-flow-entry="transfer">Add Transfer</button>
-            <button class="nav-menu-button" type="button" data-quick-action="account">Add Financial Account</button>
-            <button class="nav-menu-button" type="button" data-quick-action="insurance">Add Insurance</button>
-            <button class="nav-menu-button" type="button" data-quick-action="liability">Add Liability</button>
-            <button class="nav-menu-button" type="button" data-quick-action="journal">Add Journal</button>
-            <button class="nav-menu-button" type="button" data-quick-action="review">Add Review</button>
-            <button class="nav-menu-button" type="button" data-open-recurring>Recurring</button>
-            <button class="nav-menu-button" type="button" data-open-budget>Budget</button>
-          </div>
+        <div class="nav-menu-section">
+          <p class="nav-menu-label">Cash Flow</p>
+          <a class="nav-link" href="#cash-flow">Cash Flow Dashboard</a>
         </div>
-        <div class="nav-group" data-nav-group>
-          <button class="nav-trigger" type="button" aria-expanded="false" aria-haspopup="true" data-nav-menu="settings-menu">Settings <span aria-hidden="true">▼</span></button>
-          <div id="settings-menu" class="nav-menu" data-nav-panel>
-            <button class="nav-menu-button" type="button" data-open-data-management>Backup & Restore</button>
-            <button class="nav-menu-button" type="button" data-open-data-management>Data Management</button>
-            <button class="nav-menu-button open-settings-button" type="button">Portfolio Settings</button>
-            <button class="nav-menu-button" type="button" data-open-category-management>Cash Flow Categories</button>
-          </div>
+        <div class="nav-menu-section">
+          <p class="nav-menu-label">Settings</p>
+          <a class="nav-link" href="#settings">Settings Dashboard</a>
         </div>
       </nav>
       <button class="primary-button open-stock-dialog-button" type="button">＋ 新增研究標的</button>
@@ -216,7 +196,7 @@
         <article class="allocation-panel dashboard-allocation-panel">
           <div class="allocation-copy">
             <p class="panel-label">ALLOCATION</p>
-            <h2>資產配置</h2>
+            <h2>Asset Allocation</h2>
             <p class="allocation-number">Total Assets <strong id="dashboard-allocation-total">尚未設定</strong></p>
             <p id="dashboard-allocation-summary">Allocation 不包含負債。</p>
           </div>
@@ -232,11 +212,11 @@
 
         <div class="dashboard-grid dashboard-lower-grid">
           <article class="panel">
-            <div class="panel-heading"><div><p class="panel-label">ACTIVITY</p><h2>最近更新</h2></div></div>
+            <div class="panel-heading"><div><p class="panel-label">ACTIVITY</p><h2>Recent Updates</h2></div></div>
             <div id="dashboard-latest-activity" class="activity-list"></div>
           </article>
           <article class="panel">
-            <div class="panel-heading"><div><p class="panel-label">WARNINGS</p><h2>資料提醒</h2></div></div>
+            <div class="panel-heading"><div><p class="panel-label">WARNINGS</p><h2>Data Alerts</h2></div></div>
             <div id="dashboard-warnings" class="alert-list"></div>
           </article>
         </div>
@@ -446,22 +426,22 @@
           <a href="#liabilities">Liabilities</a>
         </nav>
         <article class="panel asset-summary-panel" data-asset-panel="accounts">
-          <div class="panel-heading"><div><p class="panel-label">ACCOUNT BALANCES</p><h2>帳戶最新餘額小計</h2></div></div>
+          <div class="panel-heading"><div><p class="panel-label">ACCOUNT BALANCES</p><h2>Account Balance Summary</h2></div></div>
           <p class="form-help">同幣別才會加總；不同幣別不會自動換算。封存帳戶預設不列入目前小計。</p>
           <div id="asset-currency-subtotals" class="summary-grid"></div>
         </article>
         <div class="asset-section-grid">
           <article class="panel" data-asset-panel="accounts">
-            <div class="panel-heading"><div><p class="panel-label">FINANCIAL ACCOUNTS</p><h2>帳戶管理</h2></div><button id="open-account-button" class="primary-button" type="button">＋ 新增帳戶</button></div>
+            <div class="panel-heading"><div><p class="panel-label">FINANCIAL ACCOUNTS</p><h2>Account Management</h2></div><button id="open-account-button" class="primary-button" type="button">＋ 新增帳戶</button></div>
             <p class="form-help">券商現金只輸入真的留在券商帳戶的現金，避免與股票持倉重複計算。</p>
             <div id="accounts-list" class="asset-list"></div>
           </article>
           <article class="panel" data-asset-panel="insurance">
-            <div class="panel-heading"><div><p class="panel-label">INSURANCE</p><h2>保單管理</h2></div><button id="open-policy-button" class="primary-button" type="button">＋ 新增保單</button></div>
+            <div class="panel-heading"><div><p class="panel-label">INSURANCE</p><h2>Policy Management</h2></div><button id="open-policy-button" class="primary-button" type="button">＋ 新增保單</button></div>
             <div id="policies-list" class="asset-list"></div>
           </article>
           <article class="panel" data-asset-panel="liabilities">
-            <div class="panel-heading"><div><p class="panel-label">LIABILITIES</p><h2>負債管理</h2></div><button id="open-liability-button" class="primary-button" type="button">＋ 新增負債</button></div>
+            <div class="panel-heading"><div><p class="panel-label">LIABILITIES</p><h2>Liability Management</h2></div><button id="open-liability-button" class="primary-button" type="button">＋ 新增負債</button></div>
             <div id="liabilities-list" class="asset-list"></div>
           </article>
         </div>
@@ -492,28 +472,28 @@
 
         <div class="dashboard-grid dashboard-lower-grid">
           <article class="panel">
-            <div class="panel-heading"><div><p class="panel-label">BUDGET OVERVIEW</p><h2>本月預算</h2></div></div>
+            <div class="panel-heading"><div><p class="panel-label">BUDGET OVERVIEW</p><h2>Monthly Budget</h2></div></div>
             <div id="budget-overview-list" class="asset-list"></div>
           </article>
           <article class="panel">
-            <div class="panel-heading"><div><p class="panel-label">UPCOMING RECURRING</p><h2>待確認週期項目</h2></div></div>
+            <div class="panel-heading"><div><p class="panel-label">UPCOMING RECURRING</p><h2>Pending Recurring Items</h2></div></div>
             <div id="upcoming-recurring-list" class="asset-list"></div>
           </article>
         </div>
 
         <div class="dashboard-grid dashboard-lower-grid">
           <article class="panel">
-            <div class="panel-heading"><div><p class="panel-label">RECENT CASH FLOW</p><h2>最近收支</h2></div></div>
+            <div class="panel-heading"><div><p class="panel-label">RECENT CASH FLOW</p><h2>Recent Cash Flow</h2></div></div>
             <div id="recent-cash-flow-list" class="asset-list"></div>
           </article>
           <article class="panel">
-            <div class="panel-heading"><div><p class="panel-label">MONTHLY REPORT</p><h2>本月分類報表</h2></div></div>
+            <div class="panel-heading"><div><p class="panel-label">MONTHLY REPORT</p><h2>Monthly Category Report</h2></div></div>
             <div id="monthly-report-list" class="asset-list"></div>
           </article>
         </div>
 
         <article class="panel dashboard-lower-grid">
-          <div class="panel-heading"><div><p class="panel-label">RECURRING LIST</p><h2>週期收入與支出</h2></div></div>
+          <div class="panel-heading"><div><p class="panel-label">RECURRING LIST</p><h2>Recurring Income & Expenses</h2></div></div>
           <div id="recurring-list" class="asset-list"></div>
         </article>
       </div>
@@ -535,7 +515,7 @@
         </nav>
         <div class="asset-section-grid">
           <article class="panel">
-            <div class="panel-heading"><div><p class="panel-label">DECISIONS</p><h2>投資決策紀錄</h2></div><a class="small-button" href="#journal">Open</a></div>
+            <div class="panel-heading"><div><p class="panel-label">DECISIONS</p><h2>Investment Decisions</h2></div><a class="small-button" href="#journal">Open</a></div>
             <p class="empty-state">Journal、Decision、Notes 保留在 Records 的 Decisions 分頁。</p>
           </article>
           <article class="panel">
@@ -543,8 +523,31 @@
             <p class="empty-state">投資回顧、Lesson、Reminder 都保留在 Reviews 分頁。</p>
           </article>
           <article class="panel">
-            <div class="panel-heading"><div><p class="panel-label">BACKUP</p><h2>資料備份</h2></div><button class="small-button" type="button" data-open-data-management>Open</button></div>
+            <div class="panel-heading"><div><p class="panel-label">BACKUP</p><h2>Data Backup</h2></div><button class="small-button" type="button" data-open-data-management>Open</button></div>
             <p class="empty-state">Backup、Import、Integrity Check 移到這裡，不佔用 Dashboard 首屏。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings" class="content-section workspace-section">
+      <div class="container">
+        <div class="asset-section-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">PORTFOLIO</p><h2>Portfolio Settings</h2></div><button class="small-button open-settings-button" type="button">Open</button></div>
+            <p class="empty-state">Base currency, satellite allocation limits, and review reminders.</p>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">DATA</p><h2>Data Management</h2></div><button class="small-button" type="button" data-open-data-management>Open</button></div>
+            <p class="empty-state">Import, restore, integrity checks, and offline data recovery.</p>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">CASH FLOW</p><h2>Cash Flow Categories</h2></div><button class="small-button" type="button" data-open-category-management>Open</button></div>
+            <p class="empty-state">Income and expense category setup for reporting.</p>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="panel-label">BACKUP</p><h2>Backup & Restore</h2></div><button class="small-button" type="button" data-open-data-management>Open</button></div>
+            <p class="empty-state">Export a local backup before larger edits or imports.</p>
           </article>
         </div>
       </div>

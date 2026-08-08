@@ -154,7 +154,24 @@
   function toggleMobileNavigation() {
     const isOpen = document.body.classList.toggle("mobile-nav-open");
     document.querySelector("[data-mobile-nav-toggle]")?.setAttribute("aria-expanded", String(isOpen));
+    if (isOpen) closeHeaderQuickActions();
     if (!isOpen) closeNavMenus();
+  }
+
+  function closeHeaderQuickActions() {
+    document.body.classList.remove("header-quick-actions-open");
+    document.querySelector("[data-header-quick-actions-toggle]")?.setAttribute("aria-expanded", "false");
+    const menu = byId("header-quick-action-menu");
+    if (menu) menu.hidden = true;
+  }
+
+  function toggleHeaderQuickActions() {
+    const isOpen = !document.body.classList.contains("header-quick-actions-open");
+    document.body.classList.toggle("header-quick-actions-open", isOpen);
+    document.querySelector("[data-header-quick-actions-toggle]")?.setAttribute("aria-expanded", String(isOpen));
+    const menu = byId("header-quick-action-menu");
+    if (menu) menu.hidden = !isOpen;
+    if (isOpen) closeMobileNavigation();
   }
 
   function closeQuickActions() {
@@ -214,7 +231,6 @@
   function updateActiveNavigation() {
     const hash = portfolioRouter.syncHash();
     document.body.dataset.route = hash;
-    document.querySelector(".mobile-home-button")?.classList.toggle("is-hidden", hash === "dashboard");
     const routeMeta = getRouteHeaderMeta(hash);
     const routeKicker = document.querySelector(".route-kicker");
     const mobileTitle = document.querySelector(".mobile-route-title");
@@ -239,16 +255,17 @@
     const routes = {
       dashboard: ["NET WORTH", "Net Worth Dashboard", "Portfolio overview, cash movement, and alerts"],
       "research-dashboard": ["INVESTMENT", "Companies", "Research quality, thesis status, and review priority"],
-      watchlist: ["INVESTMENT", "Watchlist", "候選標的、觀察階段、下一次檢查與決策入口"],
-      positions: ["INVESTMENT", "Positions", "持倉、成本、損益與交易紀錄"],
-      journal: ["INVESTMENT", "Decisions", "買賣理由、執行狀態與決策脈絡"],
-      reviews: ["INVESTMENT", "Reviews", "投資回顧、錯誤模式與可重用 Lessons"],
-      assets: ["ASSET CORE", "Accounts", "帳戶、保單、負債與離線資產核心"],
-      accounts: ["ASSET CORE", "Accounts", "帳戶、保單、負債與離線資產核心"],
-      insurance: ["ASSET CORE", "Insurance", "保單價值、繳費狀態與保障資料"],
-      liabilities: ["ASSET CORE", "Liabilities", "負債餘額、利率與還款提醒"],
-      "cash-flow": ["CASH FLOW", "Cash Flow", "收入、支出、預算與週期項目"],
-      records: ["RECORDS", "Records", "決策紀錄、回顧與備份入口"]
+      watchlist: ["INVESTMENT", "Watchlist", "Candidates, review timing, and decision entry points"],
+      positions: ["INVESTMENT", "Positions", "Holdings, cost basis, P&L, and transaction history"],
+      journal: ["INVESTMENT", "Decisions", "Investment rationale, execution status, and context"],
+      reviews: ["INVESTMENT", "Reviews", "Post-decision reviews, mistakes, and reusable lessons"],
+      assets: ["ASSET CORE", "Accounts", "Accounts, policies, liabilities, and offline asset records"],
+      accounts: ["ASSET CORE", "Accounts", "Accounts, policies, liabilities, and offline asset records"],
+      insurance: ["ASSET CORE", "Insurance", "Policy values, premium status, and coverage records"],
+      liabilities: ["ASSET CORE", "Liabilities", "Debt balances, interest rates, and payment reminders"],
+      "cash-flow": ["CASH FLOW", "Cash Flow", "Income, expenses, budgets, and recurring items"],
+      records: ["RECORDS", "Records", "Decision records, reviews, and backups"],
+      settings: ["SETTINGS", "Settings", "Preferences, categories, backups, and data tools"]
     };
     const [kicker, title, description] = routes[route] || routes.dashboard;
     return { kicker, title, description };
@@ -315,6 +332,7 @@
   document.addEventListener("click", (event) => {
     if (!event.target.closest("[data-nav-group]")) closeNavMenus();
     if (!event.target.closest(".site-header")) closeMobileNavigation();
+    if (!event.target.closest(".header-action-toggle, .header-quick-action-menu")) closeHeaderQuickActions();
     if (event.target.closest("[data-sheet-close]")) {
       closeWorkspaceMenu();
       closeMobileFilters();
@@ -351,6 +369,11 @@
       toggleMobileNavigation();
       return;
     }
+    if (target.dataset.headerQuickActionsToggle !== undefined) {
+      toggleHeaderQuickActions();
+      return;
+    }
+    if (target.closest(".header-quick-action-menu")) closeHeaderQuickActions();
     if (target.dataset.quickActionsToggle !== undefined) {
       toggleQuickActions();
       return;
@@ -421,8 +444,14 @@
     if (target.dataset.quickAction === "expense") cashFlowForm.openEntryDialog("expense");
     if (target.dataset.quickAction === "journal") stocksModule.openJournalDialog();
     if (target.dataset.quickAction === "review") reviewView.openReviewDialog();
-    if (target.dataset.quickAction) closeQuickActions();
-    if (target.dataset.openCashFlowEntry) cashFlowForm.openEntryDialog(target.dataset.openCashFlowEntry);
+    if (target.dataset.quickAction) {
+      closeQuickActions();
+      closeHeaderQuickActions();
+    }
+    if (target.dataset.openCashFlowEntry) {
+      closeHeaderQuickActions();
+      cashFlowForm.openEntryDialog(target.dataset.openCashFlowEntry);
+    }
     if (target.dataset.openDataManagement !== undefined) {
       refreshRecoveryState();
       openDialog("data-management-dialog");
@@ -467,8 +496,14 @@
     if (target.dataset.runIntegrityCheck !== undefined) runIntegrityCheck();
     if (target.dataset.openCategoryManagement !== undefined) openDialog("category-management-dialog");
     if (target.dataset.openCategory) cashFlowForm.openCategoryDialog(target.dataset.openCategory);
-    if (target.dataset.openRecurring !== undefined) cashFlowForm.openRecurringDialog();
-    if (target.dataset.openBudget !== undefined) cashFlowForm.openBudgetDialog();
+    if (target.dataset.openRecurring !== undefined) {
+      closeHeaderQuickActions();
+      cashFlowForm.openRecurringDialog();
+    }
+    if (target.dataset.openBudget !== undefined) {
+      closeHeaderQuickActions();
+      cashFlowForm.openBudgetDialog();
+    }
     if (target.dataset.editCategory) cashFlowForm.openCategoryDialog(target.dataset.categoryType, target.dataset.editCategory);
     if (target.dataset.archiveCategory) confirmAndRun("確定要封存這個分類嗎？", () => cashFlowRepo.archiveCategory(target.dataset.categoryType, target.dataset.archiveCategory));
     if (target.dataset.restoreCategory) confirmAndRun("確定要還原這個分類嗎？", () => cashFlowRepo.restoreCategory(target.dataset.categoryType, target.dataset.restoreCategory));

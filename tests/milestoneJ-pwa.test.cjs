@@ -46,7 +46,7 @@ assert(serviceWorker.includes("request.mode === \"navigate\""));
 assert(serviceWorker.includes("caches.delete"));
 assert(serviceWorker.includes("SKIP_WAITING"));
 assert(!serviceWorker.includes(".then(() => self.skipWaiting())"));
-assert(serviceWorker.includes("core-satellite-v1.2.4"));
+assert(serviceWorker.includes("core-satellite-v1.2.6"));
 
 assert(pagesWorkflow.includes("actions/configure-pages@v5"));
 assert(pagesWorkflow.includes("actions/upload-pages-artifact@v4"));

@@ -72,7 +72,26 @@ body.is-standalone .site-header { background: #0c2438; }
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.mobile-nav-toggle { display: grid; flex: 0 0 auto; width: 44px; height: 44px; place-items: center; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 9px; background: rgba(255, 255, 255, 0.08); color: #fff; font-size: 1.45rem; font-weight: 800; line-height: 1; }
+.header-action-toggle, .mobile-nav-toggle { display: grid; flex: 0 0 auto; width: 44px; height: 44px; place-items: center; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 9px; background: rgba(255, 255, 255, 0.08); color: #fff; font-size: 1.45rem; font-weight: 800; line-height: 1; }
+.header-action-toggle { border-color: rgba(120, 200, 191, 0.45); background: var(--teal); box-shadow: 0 10px 24px rgba(5, 24, 36, 0.2); }
+body.header-quick-actions-open .header-action-toggle { background: var(--teal-dark); }
+.header-quick-action-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 58px;
+  z-index: 93;
+  display: grid;
+  width: min(280px, calc(100vw - 40px));
+  max-height: min(74vh, 680px);
+  overflow: auto;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: var(--navy-light);
+  box-shadow: 0 22px 54px rgba(5, 24, 36, 0.34);
+}
+.header-quick-action-menu[hidden] { display: none; }
 .main-nav {
   position: absolute;
   top: calc(100% + 10px);
@@ -387,22 +406,6 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
 .site-footer { padding: 26px 0; background: var(--navy); color: #aebfc8; font-size: 0.75rem; text-align: center; }
 .site-footer p { margin-bottom: 2px; }
 .floating-menu-button, .bottom-sheet-menu, .sheet-backdrop, .workspace-tabs, .mobile-filter-button { display: none; }
-.mobile-home-button {
-  display: grid;
-  flex: 0 0 auto;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: #fff;
-}
-.mobile-home-button svg { width: 38px; height: 38px; overflow: visible; }
-.mobile-home-button circle, .mobile-home-button path { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.mobile-home-button circle { stroke: #78c8bf; }
-.mobile-home-button path { stroke: #fff; }
-.mobile-home-button.is-hidden { display: none; }
 @media (max-width: 960px) {
   .topbar { gap: 14px; padding: 12px 0; }
   .stat-grid, .dashboard-row-three { grid-template-columns: repeat(2, 1fr); }
@@ -421,7 +424,9 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
     font-size: 1.22rem;
   }
   .brand { display: none; }
-  .main-nav { right: -2px; width: min(360px, calc(100vw - 28px)); max-height: min(76svh, 620px); grid-template-columns: 1fr; padding: 12px; border-radius: 12px; }
+  .header-action-toggle, .mobile-nav-toggle { width: 40px; height: 40px; border-radius: 10px; font-size: 1.25rem; }
+  .header-quick-action-menu { right: 44px; width: min(318px, calc(100vw - 28px)); max-height: min(76svh, 620px); padding: 12px; border-radius: 12px; }
+  .main-nav { right: -2px; width: min(318px, calc(100vw - 28px)); max-height: min(76svh, 620px); grid-template-columns: 1fr; padding: 12px; border-radius: 12px; }
   .global-search-results { left: 0; right: auto; width: 100%; }
   .pwa-status { right: max(14px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom)); align-items: stretch; flex-direction: column; }
   main > .workspace-section { display: none; }
@@ -432,6 +437,7 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   body[data-route="reviews"] #reviews,
   body[data-route="cash-flow"] #cash-flow,
   body[data-route="records"] #records,
+  body[data-route="settings"] #settings,
   body[data-route="assets"] #assets,
   body[data-route="accounts"] #assets,
   body[data-route="insurance"] #assets,
