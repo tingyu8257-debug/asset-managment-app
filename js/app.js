@@ -227,8 +227,14 @@
   }
 
   function getMobileRouteTitle(route) {
-    if (["research-dashboard", "watchlist", "positions", "journal", "reviews"].includes(route)) return "Investment";
-    if (["assets", "accounts", "insurance", "liabilities"].includes(route)) return "Asset";
+    if (route === "research-dashboard") return "Companies";
+    if (route === "watchlist") return "Watchlist";
+    if (route === "positions") return "Positions";
+    if (route === "journal") return "Decisions";
+    if (route === "reviews") return "Reviews";
+    if (route === "assets" || route === "accounts") return "Accounts";
+    if (route === "insurance") return "Insurance";
+    if (route === "liabilities") return "Liabilities";
     if (route === "cash-flow") return "Cash Flow";
     if (route === "records") return "Records";
     return "Net Worth Dashboard";

@@ -397,6 +397,62 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   .hero-section { min-height: calc(100svh - 50px); padding: 18px 0 22px; background: var(--cream); }
   .hero-heading, .section-heading, .card-footer, .entry-heading { align-items: stretch; flex-direction: column; }
   .hero-heading { gap: 12px; min-height: 0; margin-bottom: 18px; color: var(--text); }
+  .hero-heading > div:first-child, .section-heading > div:first-child {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+  }
+  .hero-heading > div:first-child {
+    padding: 4px 0 2px;
+  }
+  .hero-heading > div:first-child::after, .section-heading > div:first-child::after {
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  #dashboard .hero-heading > div:first-child::after { content: "Portfolio overview, cash movement, and alerts"; }
+  #research-dashboard .section-heading > div:first-child::after { content: "Company research quality, thesis status, and review priority"; }
+  #watchlist .section-heading > div:first-child::after { content: "候選標的、觀察階段、下一次檢查與決策入口"; }
+  #positions .section-heading > div:first-child::after { content: "持倉、成本、損益與交易紀錄"; }
+  #journal .section-heading > div:first-child::after { content: "買賣理由、執行狀態與決策脈絡"; }
+  #reviews .section-heading > div:first-child::after { content: "投資回顧、錯誤模式與可重用 Lessons"; }
+  #assets .section-heading > div:first-child::after { content: "帳戶、保單、負債與離線資產核心"; }
+  #cash-flow .section-heading > div:first-child::after { content: "收入、支出、預算與週期項目"; }
+  #records .section-heading > div:first-child::after { content: "決策紀錄、回顧與備份入口"; }
+  .hero-heading .eyebrow, .section-heading .eyebrow {
+    width: fit-content;
+    margin: 0;
+    padding: 3px 8px;
+    border: 1px solid rgba(12, 123, 115, 0.18);
+    border-radius: 999px;
+    background: #edf5f3;
+    color: var(--teal-dark);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+  }
+  .hero-heading h1, .section-heading h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.65rem;
+    line-height: 1.08;
+  }
+  .section-heading h2::after {
+    display: block;
+    margin-top: 3px;
+    color: var(--teal-dark);
+    font-size: 0.95rem;
+    font-weight: 850;
+    line-height: 1.2;
+  }
+  #research-dashboard .section-heading h2::after { content: "Companies"; }
+  #watchlist .section-heading h2::after { content: "Watchlist"; }
+  #positions .section-heading h2::after { content: "Positions"; }
+  #journal .section-heading h2::after { content: "Decisions"; }
+  #reviews .section-heading h2::after { content: "Reviews"; }
+  #assets .section-heading h2::after { content: "Accounts"; }
+  body[data-route="insurance"] #assets .section-heading h2::after { content: "Insurance"; }
+  body[data-route="liabilities"] #assets .section-heading h2::after { content: "Liabilities"; }
   .quick-actions-toggle {
     display: flex;
     align-items: center;
@@ -466,16 +522,35 @@ dialog::backdrop { background: rgba(5, 24, 36, 0.68); }
   .field-wide { grid-column: auto; }
   .content-section { min-height: calc(100svh - 50px); padding: 22px 0 24px; background: var(--cream); }
   .alternate-section { background: var(--cream); }
-  .section-heading { gap: 8px; min-height: 0; margin-bottom: 22px; color: var(--text); }
+  .section-heading { gap: 12px; min-height: 0; margin-bottom: 14px; color: var(--text); }
   .section-heading .api-actions {
     width: 100%;
-    margin-top: 30px;
+    margin-top: 2px;
     padding-top: 0;
     border-top: 1px solid rgba(12, 36, 56, 0.08);
   }
   .section-heading .api-actions .secondary-button { background: var(--surface); }
   .section-heading .api-actions .primary-button { box-shadow: 0 8px 18px rgba(12, 123, 115, 0.16); }
   .mobile-filter-button { display: none; }
+  .panel-heading {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .panel-heading .panel-label {
+    width: fit-content;
+    margin-bottom: 3px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #eef2f1;
+    color: var(--teal-dark);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+  }
+  .panel-heading h2, .panel-heading h3 {
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.2;
+  }
   .workspace-tabs {
     display: flex;
     gap: 10px;
