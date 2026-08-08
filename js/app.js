@@ -300,6 +300,15 @@
       closeMobileFilters();
       return;
     }
+    const researchCard = event.target.closest("[data-research-card]");
+    const clickedCardControl = event.target.closest("button, a, input, select, textarea, label, summary");
+    if (researchCard && !clickedCardControl && window.matchMedia("(max-width: 640px)").matches) {
+      document.querySelectorAll("[data-research-card].card-actions-open").forEach((card) => {
+        if (card !== researchCard) card.classList.remove("card-actions-open");
+      });
+      researchCard.classList.toggle("card-actions-open");
+      return;
+    }
     const target = event.target.closest("button, a");
     if (!target) return;
     if (target.dataset.mobileNavToggle !== undefined) {

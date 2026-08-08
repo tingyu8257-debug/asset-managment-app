@@ -57,11 +57,18 @@
       const status = researchSystem.getResearchStatus({ state, stock, calculatePosition, currentDate: new Date().toISOString().slice(0, 10) });
       const latestDecision = latestJournal(stock.id);
       const latestDecisionText = latestDecision ? `${journalTypeLabels[latestDecision.decisionType] || latestDecision.decisionType}${SEPARATOR}${latestDecision.decisionDate || UNKNOWN_TEXT}${SEPARATOR}${executionStatusLabels[latestDecision.executionStatus] || latestDecision.executionStatus}` : UNKNOWN_TEXT;
-      return `<article class="research-card">
+      const positionText = held ? `${formatPrice(position?.shares)} shares` : "No position";
+      return `<article class="research-card" data-research-card>
         <div class="card-top">
           <div><span class="ticker">${escapeHtml(stock.ticker)}</span><h3>${escapeHtml(stock.companyName)}</h3><p>${escapeHtml(unknown(stock.market))}${SEPARATOR}${escapeHtml(unknown(stock.industry))}${SEPARATOR}${escapeHtml(stock.currency || "TWD")}</p></div>
-          <div class="card-status-actions"><span class="badge ${held ? "badge-green" : "badge-blue"}">${escapeHtml(unknown(stock.stage))}</span><span class="badge ${status.severity ? "badge-warning" : "badge-green"}">${escapeHtml(status.statusLabel)}</span></div>
+          <div class="card-status-actions"><button class="small-button danger-button mobile-card-delete" type="button" data-request-delete-stock="${stock.id}" aria-label="Delete ${escapeHtml(stock.ticker)}">Delete</button><span class="badge ${held ? "badge-green" : "badge-blue"}">${escapeHtml(unknown(stock.stage))}</span><span class="badge ${status.severity ? "badge-warning" : "badge-green"}">${escapeHtml(status.statusLabel)}</span></div>
         </div>
+        <dl class="mobile-card-summary">
+          <div><dt>Position</dt><dd>${escapeHtml(positionText)}</dd></div>
+          <div><dt>Next Review</dt><dd>${escapeHtml(unknown(stock.nextReviewDate))}</dd></div>
+          <div><dt>Observation</dt><dd>${escapeHtml(unknown(stock.stage))}</dd></div>
+          <div><dt>Confidence</dt><dd>${escapeHtml(status.confidence ? `${status.confidence}/10` : UNKNOWN_TEXT)}</dd></div>
+        </dl>
         <div class="tag-row">${stock.tags?.length ? stock.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("") : `<span>尚未設定</span>`}</div>
         <dl class="price-range"><div><dt>Fair Price Range</dt><dd>${escapeHtml(unknown(stock.fairPriceRange))}</dd></div><div><dt>Next Review</dt><dd>${escapeHtml(unknown(stock.nextReviewDate))}</dd></div></dl>
         <div class="research-notes">
@@ -73,7 +80,7 @@
           <p><strong>Latest Decision</strong>${escapeHtml(latestDecisionText)}</p>
         </div>
         ${renderThesisHistory(stock)}
-        <div class="card-footer"><small>Last updated ${escapeHtml(unknown(status.lastUpdated || stock.lastReviewedAt || stock.lastUpdatedDate))}</small><div class="card-actions"><button class="secondary-button" type="button" data-open-company-workspace="${stock.id}">Workspace</button><button class="secondary-button" type="button" data-create-decision="${stock.id}">Create Decision</button><button class="secondary-button" type="button" data-edit-stock="${stock.id}">Edit</button><button class="secondary-button" type="button" data-review-thesis="${stock.id}">Review Thesis</button>${held ? `<span class="badge badge-green">Held ${formatPrice(position?.shares)} shares</span>` : `<button class="secondary-button" type="button" data-initial-position="${stock.id}">Create Position</button>`}<button class="secondary-button danger-button" type="button" data-request-delete-stock="${stock.id}">Delete</button></div></div>
+        <div class="card-footer"><small>Last updated ${escapeHtml(unknown(status.lastUpdated || stock.lastReviewedAt || stock.lastUpdatedDate))}</small><div class="card-actions"><button class="secondary-button" type="button" data-open-company-workspace="${stock.id}">Workspace</button><button class="secondary-button" type="button" data-create-decision="${stock.id}">Create Decision</button><button class="secondary-button" type="button" data-edit-stock="${stock.id}">Edit</button><button class="secondary-button" type="button" data-review-thesis="${stock.id}">Review Thesis</button>${held ? `<span class="badge badge-green">Held ${formatPrice(position?.shares)} shares</span>` : `<button class="secondary-button" type="button" data-initial-position="${stock.id}">Create Position</button>`}<button class="secondary-button danger-button desktop-card-delete" type="button" data-request-delete-stock="${stock.id}">Delete</button></div></div>
       </article>`;
     }
 
@@ -391,4 +398,3 @@
 
   return { create };
 })();
-
